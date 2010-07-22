@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd" 
+	version="1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd">
+	
+	<portlet>
+		<description>Sakai Basic LTI Portlet</description>
+		<portlet-name>Sakai-uPortal connector</portlet-name>
+		<display-name>Sakai-uPortal connector</display-name>
+		<portlet-class>au.edu.anu.portal.portlets.basiclti.PortletDispatcher</portlet-class>
+		
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>VIEW</portlet-mode>
+			<portlet-mode>EDIT</portlet-mode>
+		</supports>
+		<supported-locale>en</supported-locale>
+		<portlet-info>
+			<title>Sakai-uPortal connector</title>
+			<short-title>Sakai-uPortal connector</short-title>
+			<keywords>sakai, conncetor, basiclti, lti</keywords>
+		</portlet-info>
+		
+		<!-- pages -->
+		<init-param>
+			<name>viewUrl</name>
+			<value>/pages/view.jsp</value>
+		</init-param>
+		<init-param>
+			<name>editUrl</name>
+			<value>/pages/edit.jsp</value>
+		</init-param>
+		<init-param>
+			<name>proxyUrl</name>
+			<value>/pages/proxy.jsp</value>
+		</init-param>
+		<init-param>
+			<name>errorUrl</name>
+			<value>/pages/error.jsp</value>
+		</init-param>
+		
+		<!-- basiclti params -->
+		<init-param>
+   			<name>key</name>
+   			<value>my.anu.edu.au</value>
+		</init-param>
+		<init-param>
+   			<name>allowedtools</name>
+   			<value>sakai.resources:sakai.rwiki:sakai.profile2:sakai.sitestats</value>
+		</init-param>
+		
+		<!-- NOTE: you must also set the secret and endpoint params in web.xml -->
+		
+		
+		<!-- sakai params -->
+		<init-param>
+   			<name>sakai.admin.username</name>
+   			<value>admin</value>
+		</init-param>
+		<init-param>
+   			<name>sakai.admin.password</name>
+   			<value>admin</value>
+		</init-param>
+		<init-param>
+   			<name>sakai.ws.login.url</name>
+   			<value>http://localhost:8081/sakai-axis/SakaiLogin.jws?wsdl</value>
+		</init-param>
+		<init-param>
+   			<name>sakai.ws.script.url</name>
+   			<value>http://localhost:8081/sakai-axis/SakaiScript.jws?wsdl</value>
+		</init-param>
+		
+		<!-- default preferences -->
+		<portlet-preferences>
+         	<!-- 
+         	<preferences-validator>
+				au.edu.anu.portal.portlets.basiclti.validators.BasicLTIPreferencesValidator
+			</preferences-validator>
+			-->
+      	</portlet-preferences>
+		
+		
+	</portlet>
+	
+	<!--  portlet user attributes -->
+	<user-attribute>
+		<description>Username</description>
+		<name>username</name>
+	</user-attribute>
+	<user-attribute>
+		<description>Given Name</description>
+		<name>givenName</name>
+	</user-attribute>
+	<user-attribute>
+		<description>Family Name</description>
+		<name>sn</name>
+	</user-attribute>
+	<user-attribute>
+		<description>Email</description>
+		<name>mail</name>
+	</user-attribute>
+	<user-attribute>
+		<description>Display Name</description>
+		<name>displayName</name>
+	</user-attribute>
+   
+</portlet-app>
