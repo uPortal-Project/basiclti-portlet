@@ -46,12 +46,6 @@ public class PortletDispatcher extends GenericPortlet{
 	
 	// params
 	private String key;
-	private List<String> allowedTools;
-	
-	private String adminUsername;
-	private String adminPassword;
-	private String loginUrl;
-	private String scriptUrl;
 	
 	// local
 	private boolean replayForm;
@@ -71,11 +65,6 @@ public class PortletDispatcher extends GenericPortlet{
 
 	   //get params
 	   key = config.getInitParameter("key");
-	   adminUsername = config.getInitParameter("sakai.admin.username");
-	   adminPassword = config.getInitParameter("sakai.admin.password");
-	   loginUrl = config.getInitParameter("sakai.ws.login.url");
-	   scriptUrl = config.getInitParameter("sakai.ws.script.url");
-	   allowedTools = Arrays.asList(StringUtils.split(config.getInitParameter("allowedtools"), ':'));
 	   
 	}
 	
@@ -92,29 +81,6 @@ public class PortletDispatcher extends GenericPortlet{
 			PortletPreferences prefs = request.getPreferences();
 			String portletHeight = request.getParameter("portletHeight");
 			String portletTitle = request.getParameter("portletTitle");
-			String remoteSiteId = request.getParameter("remoteSiteId");
-			String remoteToolId = request.getParameter("remoteToolId");
-			
-			//catch a blank remoteSiteId and replay form
-			if(StringUtils.isBlank(remoteSiteId)) {
-				replayForm = true;
-				response.setRenderParameter("portletTitle", portletTitle);
-				response.setRenderParameter("portletHeight", portletHeight);
-				response.setRenderParameter("remoteSiteId", remoteSiteId);
-				//response.setRenderParameter("errorMessage", Messages.getString("error.form.nosite"));
-				return;
-			}
-			
-			//catch a blank remoteSiteid and replay form
-			if(StringUtils.isBlank(remoteToolId)) {
-				replayForm = true;
-				response.setRenderParameter("portletTitle", portletTitle);
-				response.setRenderParameter("portletHeight", portletHeight);
-				response.setRenderParameter("remoteSiteId", remoteSiteId);
-				//response.setRenderParameter("errorMessage", Messages.getString("error.form.notool"));
-				return;
-			}
-			
 			
 			
 			//portlet title could be blank, set to default
@@ -126,8 +92,6 @@ public class PortletDispatcher extends GenericPortlet{
 			try {
 				prefs.setValue("portletHeight", portletHeight);
 				prefs.setValue("portletTitle", portletTitle);
-				prefs.setValue("remoteSiteId", remoteSiteId);
-				prefs.setValue("remoteToolId", remoteToolId);
 			} catch (ReadOnlyException e) {
 				response.setRenderParameter("errorMessage", Messages.getString("error.form.readonly.error"));
 				log.error(e);
@@ -192,36 +156,8 @@ public class PortletDispatcher extends GenericPortlet{
 	protected void doEdit(RenderRequest request, RenderResponse response) throws PortletException, IOException {
 		log.info("Basic LTI doEdit()");
 		
-		//setup the web service bean
-		SakaiWebServiceLogic logic = new SakaiWebServiceLogic();
-		logic.setAdminUsername(adminUsername);
-		logic.setAdminPassword(adminPassword);
-		logic.setLoginUrl(loginUrl);
-		logic.setScriptUrl(scriptUrl);
-		logic.setEid(getAuthenticatedUsername(request));
-		request.setAttribute("logic", logic);
 		
-		//setup remote userId
-		String remoteUserId = getRemoteUserId(request, logic);
-		if(StringUtils.isBlank(remoteUserId)) {
-			log.error("No user info was returned from remote server.");
-			doError("error.no.remote.data", "error.heading.general", request, response);
-			return;
-		}
-		request.setAttribute("remoteUserId", remoteUserId);
-
 		
-		// get list of sites
-		List<Site> sites = getRemoteSitesForUser(logic);
-		if(sites.isEmpty()){
-			log.error("No sites were returned from remote server.");
-			doError("error.no.remote.data", "error.heading.general", request, response);
-			return;
-		}
-		request.setAttribute("remoteSites", sites);
-		
-		//set list of allowed tool registrations
-		request.setAttribute("allowedToolIds", allowedTools);
 	
 		//do we need to replay the form? This could be due to an error, or we need to show the lists again.
 		//if so, use the original request params
@@ -229,14 +165,10 @@ public class PortletDispatcher extends GenericPortlet{
 		if(replayForm) {
 			request.setAttribute("preferredPortletHeight", request.getParameter("portletHeight"));
 			request.setAttribute("preferredPortletTitle", request.getParameter("portletTitle"));
-			request.setAttribute("preferredRemoteSiteId", request.getParameter("remoteSiteId"));
-			request.setAttribute("preferredRemoteToolId", request.getParameter("remoteToolId"));
 			request.setAttribute("errorMessage", request.getParameter("errorMessage"));
 		} else {
 			request.setAttribute("preferredPortletHeight", getPreferredPortletHeight(request));
 			request.setAttribute("preferredPortletTitle", getPreferredPortletTitle(request));
-			request.setAttribute("preferredRemoteSiteId", getPreferredRemoteSiteId(request));
-			request.setAttribute("preferredRemoteToolId", getPreferredRemoteToolId(request));
 		}
 		dispatch(request, response, editUrl);
 	}
@@ -269,34 +201,10 @@ public class PortletDispatcher extends GenericPortlet{
 	 */
 	private Map<String,String> getLaunchData(RenderRequest request, RenderResponse response) {
 		
-		//get site prefs
-		String preferredRemoteSiteId = getPreferredRemoteSiteId(request);
-		if(StringUtils.isBlank(preferredRemoteSiteId)) {
-			doError("error.no.config", "error.heading.config", request, response);
-			return null;
-		}
+		//TODO need to get the data
+		//maybe just deserialise the XML back out into an object?
+		//need to send across all valid basic LTI fields as we don't know what provider we are connecting to.
 		
-		//get tool prefs
-		String preferredRemoteToolId = getPreferredRemoteToolId(request);
-		if(StringUtils.isBlank(preferredRemoteToolId)) {
-			doError("error.no.config", "error.heading.config", request, response);
-			return null;
-		}
-		
-		//setup the web service bean
-		SakaiWebServiceLogic logic = new SakaiWebServiceLogic();
-		logic.setAdminUsername(adminUsername);
-		logic.setAdminPassword(adminPassword);
-		logic.setLoginUrl(loginUrl);
-		logic.setScriptUrl(scriptUrl);
-		logic.setEid(getAuthenticatedUsername(request));
-		
-		//get remote userId
-		String remoteUserId = getRemoteUserId(request, logic);
-		if(StringUtils.isBlank(remoteUserId)) {
-			doError("error.no.remote.data", "error.heading.general", request, response);
-			return null;
-		}
 		
 		//get user info
 		Map<String,String> userInfo = getUserInfo(request);
@@ -318,16 +226,16 @@ public class PortletDispatcher extends GenericPortlet{
 		props.put("lis_person_name_full", userInfo.get("displayName"));
 		props.put("lis_person_contact_email_primary", userInfo.get("email"));
 		props.put("resource_link_id", getPortletNamespace(response));
-		props.put("context_id", preferredRemoteSiteId);
+		//props.put("context_id", preferredRemoteSiteId);
 		props.put("tool_consumer_instance_guid", key);
 		props.put("lti_version","LTI-1p0");
 		props.put("lti_message_type","basic-lti-launch-request");
 		props.put("oauth_callback","about:blank");
 		props.put("basiclti_submit", "Launch Endpoint with BasicLTI Data");
-		props.put("user_id", remoteUserId);
+		//props.put("user_id", remoteUserId);
 		
 		//additional fields
-		props.put("remote_tool_id", preferredRemoteToolId);
+		//props.put("remote_tool_id", preferredRemoteToolId);
 		
 		return props;
 	}
@@ -354,26 +262,6 @@ public class PortletDispatcher extends GenericPortlet{
 	}
 	
 	/**
-	 * Get the preferred remote site id, or null if they have not made a choice yet
-	 * @param request
-	 * @return
-	 */
-	private String getPreferredRemoteSiteId(RenderRequest request) {
-		PortletPreferences pref = request.getPreferences();
-		return pref.getValue("remoteSiteId", null);
-	}
-	
-	/**
-	 * Get the preferred remote tool id, or null if they have not made a choice yet
-	 * @param request
-	 * @return
-	 */
-	private String getPreferredRemoteToolId(RenderRequest request) {
-		PortletPreferences pref = request.getPreferences();
-		return pref.getValue("remoteToolId", null);
-	}
-	
-	/**
 	 * Get the current username
 	 * @param request
 	 * @return
@@ -382,34 +270,6 @@ public class PortletDispatcher extends GenericPortlet{
 		Map<String,String> userInfo = getUserInfo(request);
 		return userInfo.get("username");
 	}
-	
-	/**
-	 * Get the remote userId for this user, either from session or from remote service
-	 * @param request
-	 * @param logic
-	 * @return
-	 */
-	private String getRemoteUserId(RenderRequest request, SakaiWebServiceLogic logic){
-		
-		String remoteUserId = (String) request.getPortletSession().getAttribute("remoteUserId");
-		if(StringUtils.isBlank(remoteUserId)) {
-			remoteUserId = SakaiWebServiceHelper.getRemoteUserIdForUser(logic);
-			request.getPortletSession().setAttribute("remoteUserId", remoteUserId);
-		}
-		
-		return remoteUserId;
-	}
-	
-	/**
-	 * Get the list of remote sites for this user
-	 * @param logic
-	 * @return
-	 */
-	private List<Site> getRemoteSitesForUser(SakaiWebServiceLogic logic){
-		return SakaiWebServiceHelper.getAllSitesForUser(logic);
-	}
-	
-	
 	
 	
 	/**

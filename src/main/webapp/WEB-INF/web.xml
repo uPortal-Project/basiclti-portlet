@@ -7,10 +7,6 @@
    	<display-name>basiclti-portlet</display-name>
 	
 	<context-param>
-		<param-name>endpoint</param-name>
-		<param-value>http://localhost:8081/imsblti/provider/</param-value>
-	</context-param>
-	<context-param>
 		<param-name>secret</param-name>
 		<param-value>secret</param-value>
 	</context-param>

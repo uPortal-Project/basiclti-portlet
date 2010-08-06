@@ -85,71 +85,7 @@ pageContext.setAttribute("heights",heights);
 		</select>
 		
 			
-		<p><fmt:message key="config.remote.site" /></p>
-		<select name="remoteSiteId" id="<portlet:namespace/>_remoteSiteId">
-			<option value=""><fmt:message key="config.remote.site.choose" /></option>
-			<c:forEach var="item" items="${remoteSites}">
-				<c:choose>
-					<c:when test="${item.id eq preferredRemoteSiteId}">
-						<option value="${item.id}" selected>${item.title}</option>
-					</c:when>
-					<c:otherwise>
-						<option value="${item.id}">${item.title}</option>
-					</c:otherwise>
-				</c:choose>
-			</c:forEach>
-		</select>
-			
-		
-		
-		<p><fmt:message key="config.remote.tool" /></p>
-		<c:choose>
-			<c:when test="${not empty preferredRemoteSiteId || replayForm}">
-			
-				<%
-				// get list of tools for this site
-				List<Tool> rawTools = SakaiWebServiceHelper.getToolsForSite((SakaiWebServiceLogic)request.getAttribute("logic"), (String)request.getAttribute("preferredRemoteSiteId"));
-				
-				//clean it
-				List<Tool> tools = new ArrayList<Tool>();
-				List<String> allowedToolIds = (List<String>)request.getAttribute("allowedToolIds");
-				
-				for(Tool tool: rawTools) {
-					if(allowedToolIds.contains(tool.getRegistrationId())) {
-						tools.add(tool);
-					}
-				}
-				
-				
-				pageContext.setAttribute("tools",tools);
-				%>
-				
-				<select name="remoteToolId" id="<portlet:namespace/>_remoteToolId">
-					<option value=""><fmt:message key="config.remote.tool.choose" /></option>
-					
-					<c:forEach var="item" items="${tools}">
-						<c:choose>
-							<c:when test="${item.registrationId eq preferredRemoteToolId}">
-								<option value="${item.registrationId}" selected>${item.title}</option>
-							</c:when>
-							<c:otherwise>
-								<option value="${item.registrationId}">${item.title}</option>
-							</c:otherwise>
-						</c:choose>
-					</c:forEach>
-				</select>
-			
-			
-			</c:when>
-			<c:otherwise>
-				<select name="" disabled>
-					<option value=""><fmt:message key="config.remote.tool.choosesitefirst" /></option>
-				</select>
-			</c:otherwise>
-		
-		
-		</c:choose>
-		
+		<!-- field to enter XML here -->
 		
 		
 		<p>

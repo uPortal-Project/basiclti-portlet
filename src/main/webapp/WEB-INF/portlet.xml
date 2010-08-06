@@ -5,9 +5,9 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd">
 	
 	<portlet>
-		<description>Sakai Basic LTI Portlet</description>
-		<portlet-name>Sakai-uPortal connector</portlet-name>
-		<display-name>Sakai-uPortal connector</display-name>
+		<description>Basic LTI Portlet</description>
+		<portlet-name>basiclti-portlet</portlet-name>
+		<display-name>basiclti-portlet</display-name>
 		<portlet-class>au.edu.anu.portal.portlets.basiclti.PortletDispatcher</portlet-class>
 		
 		<expiration-cache>0</expiration-cache>
@@ -18,9 +18,9 @@
 		</supports>
 		<supported-locale>en</supported-locale>
 		<portlet-info>
-			<title>Sakai-uPortal connector</title>
-			<short-title>Sakai-uPortal connector</short-title>
-			<keywords>sakai, conncetor, basiclti, lti</keywords>
+			<title>Basic LTI connector</title>
+			<short-title>Basic LTI connector</short-title>
+			<keywords>connector, basiclti, lti</keywords>
 		</portlet-info>
 		
 		<!-- pages -->
@@ -46,31 +46,8 @@
    			<name>key</name>
    			<value>my.anu.edu.au</value>
 		</init-param>
-		<init-param>
-   			<name>allowedtools</name>
-   			<value>sakai.resources:sakai.rwiki:sakai.profile2:sakai.sitestats</value>
-		</init-param>
 		
 		<!-- NOTE: you must also set the secret and endpoint params in web.xml -->
-		
-		
-		<!-- sakai params -->
-		<init-param>
-   			<name>sakai.admin.username</name>
-   			<value>admin</value>
-		</init-param>
-		<init-param>
-   			<name>sakai.admin.password</name>
-   			<value>admin</value>
-		</init-param>
-		<init-param>
-   			<name>sakai.ws.login.url</name>
-   			<value>http://localhost:8081/sakai-axis/SakaiLogin.jws?wsdl</value>
-		</init-param>
-		<init-param>
-   			<name>sakai.ws.script.url</name>
-   			<value>http://localhost:8081/sakai-axis/SakaiScript.jws?wsdl</value>
-		</init-param>
 		
 		<!-- default preferences -->
 		<portlet-preferences>
