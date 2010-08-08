@@ -3,26 +3,18 @@
   	<modelVersion>4.0.0</modelVersion>
   
   	<groupId>au.edu.anu.portal.portlets</groupId>
-  	<artifactId>sakai-connector</artifactId>
-  	<name>Sakai connector portlet for uPortal</name>
+  	<artifactId>basiclti-portlet</artifactId>
+  	<name>Basic LTI portlet for uPortal</name>
   	
-  	<version>1.1-SNAPSHOT</version>
+  	<version>1.0-SNAPSHOT</version>
   	<packaging>war</packaging>
-  	
-  	<!-- 
-  	<parent>
-        <groupId>org.jasig.portal</groupId>
-        <artifactId>uportal-parent</artifactId>
-        <version>3.2.1</version>
-    </parent>
-    -->
-  	
+  	 	
   	<organization>
         <name>Division of Information, Australian National University</name>
         <url>http://information.anu.edu.au/information/</url>
     </organization>
     
-    <inceptionYear>2009</inceptionYear>
+    <inceptionYear>2010</inceptionYear>
 	
 	<developers>
 		<developer>
@@ -64,6 +56,7 @@
                 <enabled>false</enabled>
             </releases>
         </repository>
+        <!--
         <repository>
             <id>apache.snapshots</id>
             <url>http://people.apache.org/repo/m2-snapshot-repository</url>
@@ -74,6 +67,7 @@
                 <enabled>false</enabled>
             </releases>
         </repository>
+        -->
         <repository>
 			<id>es-maven</id>
 			<name>Enterprise Systems Maven Repository</name>
@@ -107,29 +101,18 @@
 			<url>scp://es-maven.anu.edu.au/export/web/es-maven/maven2/</url>
 			<layout>default</layout>
 		</repository>
-		<!-- 
 		<site>
       		<id>es-maven-site</id>
       		<url>scp://es-maven.anu.edu.au/export/web/es-maven/site/anu-portlets/${artifactId}</url>
     	</site>
-    	-->
 	</distributionManagement>
   	
   	<scm>
-      	<developerConnection>scm:svn:https://doiweb-repo.anu.edu.au/repositories/es-projects/anu-portlets/sakai-connector/trunk</developerConnection>
-      	<url>https://doiweb-repo.anu.edu.au/repositories/es-projects/anu-portlets/sakai-connector/trunk</url>
+      	<developerConnection>scm:svn:https://doiweb-repo.anu.edu.au/repositories/es-projects/anu-portlets/basiclti-portlet/trunk</developerConnection>
+      	<url>https://doiweb-repo.anu.edu.au/repositories/es-projects/anu-portlets/basiclti-portlet/trunk</url>
    	</scm> 
   
     <dependencies>
-  		
-  		<!--  anu dependencies -->
-  		<!--  
-  		<dependency>
- 			<groupId>au.edu.anu.taglib</groupId>
-			<artifactId>anu-taglib</artifactId>
-			<version>1.5</version>
-		</dependency>
-		-->
   		
   		<!-- external bundled dependencies -->
       	<dependency>
@@ -152,7 +135,7 @@
 			<artifactId>commons-validator</artifactId>
 			<version>1.3.1</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
@@ -328,7 +311,7 @@
 				<artifactId>maven-release-plugin</artifactId>
 				<version>2.0</version>
 				<configuration>
-          			<tagBase>https://doiweb-repo.anu.edu.au/repositories/es-projects/anu-portlets/sakai-connector/tags/</tagBase>
+          			<tagBase>https://doiweb-repo.anu.edu.au/repositories/es-projects/anu-portlets/basiclti-portlet/tags/</tagBase>
         		</configuration>
         	</plugin>
 			
