@@ -1,9 +1,7 @@
 package au.edu.anu.portal.portlets.basiclti;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.portlet.ActionRequest;
@@ -25,15 +23,17 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import au.edu.anu.portal.portlets.basiclti.helper.SakaiWebServiceHelper;
-import au.edu.anu.portal.portlets.basiclti.logic.SakaiWebServiceLogic;
-import au.edu.anu.portal.portlets.basiclti.models.Site;
 import au.edu.anu.portal.portlets.basiclti.support.HttpSupport;
 import au.edu.anu.portal.portlets.basiclti.utils.Constants;
 import au.edu.anu.portal.portlets.basiclti.utils.Messages;
 
 
-
+/**
+ * PortletDispatcher
+ * 
+ * @author Steve Swinsburg (steve.swinsburg@anu.edu.au)
+ *
+ */
 public class PortletDispatcher extends GenericPortlet{
 
 	private final Log log = LogFactory.getLog(getClass().getName());
