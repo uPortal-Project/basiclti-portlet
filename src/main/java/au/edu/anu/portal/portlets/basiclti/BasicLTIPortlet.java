@@ -61,7 +61,6 @@ public class BasicLTIPortlet extends GenericPortlet{
 	   
 	   //get pages
 	   viewUrl = config.getInitParameter("viewUrl");
-	   editUrl = config.getInitParameter("editUrl");
 	   proxyUrl = config.getInitParameter("proxyUrl");
 	   errorUrl = config.getInitParameter("errorUrl");
 
@@ -151,30 +150,7 @@ public class BasicLTIPortlet extends GenericPortlet{
 		
 		dispatch(request, response, viewUrl);
 	}	
-		
-	/**
-	 * Render the edit page
-	 */
-	protected void doEdit(RenderRequest request, RenderResponse response) throws PortletException, IOException {
-		log.info("Basic LTI doEdit()");
-		
-		
-		
-	
-		//do we need to replay the form? This could be due to an error, or we need to show the lists again.
-		//if so, use the original request params
-		//otherwise, use the preferences
-		if(replayForm) {
-			request.setAttribute("preferredPortletHeight", request.getParameter("portletHeight"));
-			request.setAttribute("preferredPortletTitle", request.getParameter("portletTitle"));
-			request.setAttribute("errorMessage", request.getParameter("errorMessage"));
-		} else {
-			request.setAttribute("preferredPortletHeight", getPreferredPortletHeight(request));
-			request.setAttribute("preferredPortletTitle", getPreferredPortletTitle(request));
-		}
-		dispatch(request, response, editUrl);
-	}
-	
+			
 	/**
 	 * Get the current user's details, exposed via portlet.xml
 	 * @param request
