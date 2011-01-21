@@ -8,7 +8,7 @@
 		<description>Basic LTI Portlet</description>
 		<portlet-name>basiclti-portlet</portlet-name>
 		<display-name>basiclti-portlet</display-name>
-		<portlet-class>au.edu.anu.portal.portlets.basiclti.PortletDispatcher</portlet-class>
+		<portlet-class>au.edu.anu.portal.portlets.basiclti.BasicLTIPortlet</portlet-class>
 		
 		<expiration-cache>0</expiration-cache>
 		<supports>

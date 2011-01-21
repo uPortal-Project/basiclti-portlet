@@ -29,12 +29,14 @@ import au.edu.anu.portal.portlets.basiclti.utils.Messages;
 
 
 /**
- * PortletDispatcher
+ * BasicLTIPortlet
+ * 
+ * This is the portlet class.
  * 
  * @author Steve Swinsburg (steve.swinsburg@anu.edu.au)
  *
  */
-public class PortletDispatcher extends GenericPortlet{
+public class BasicLTIPortlet extends GenericPortlet{
 
 	private final Log log = LogFactory.getLog(getClass().getName());
 	
