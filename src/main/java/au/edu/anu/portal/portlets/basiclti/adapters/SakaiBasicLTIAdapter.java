@@ -3,7 +3,7 @@ package au.edu.anu.portal.portlets.basiclti.adapters;
 import java.util.Map;
 
 /**
- * Sakai2BasicLTIAdapter
+ * SakaiBasicLTIAdapter
  * 
  * This adapter processes the endpoint_url to append the tool_id to the end.
  * It also does some stuff with the userID (to be documented)
