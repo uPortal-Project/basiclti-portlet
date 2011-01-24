@@ -11,7 +11,7 @@ import java.util.Map;
  * @author Steve Swinsburg (steve.swinsburg@anu.edu.au)
  *
  */
-public class Sakai2BasicLTIAdapter implements IBasicLTIAdapter {
+public class SakaiBasicLTIAdapter implements IBasicLTIAdapter {
 
 	
 	@Override
