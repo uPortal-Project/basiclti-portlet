@@ -11,7 +11,10 @@ public class Constants {
 	
 	public static final int PORTLET_HEIGHT_DEFAULT=PORTLET_HEIGHT_600;
 	
-	public static final String PORTLET_TITLE_DEFAULT="Sakai-uPortal connector";
+	public static final String PORTLET_TITLE_DEFAULT="Basic LTI Portlet";
+	
+	public static final String DEFAULT_PROVIDER_TYPE="standard";
+ 
 
 	
 }

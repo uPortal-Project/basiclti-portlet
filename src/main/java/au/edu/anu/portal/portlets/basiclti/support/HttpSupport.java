@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -24,7 +26,8 @@ import org.apache.http.util.EntityUtils;
  */
 public class HttpSupport {
 
-	
+	private final static Log log = LogFactory.getLog(HttpSupport.class);
+
 	/**
 	 * Make a POST request with the given Map of parameters to be encoded
 	 * @param address	address to POST to
@@ -101,7 +104,8 @@ public class HttpSupport {
 		
 		for (Map.Entry<String,String[]> entry : params.entrySet()) {
 			map.put(entry.getKey(), entry.getValue()[0]);
-			System.out.println("key: " + entry.getKey() + ", value: " + entry.getValue()[0]);
+			//log.info("key: " + entry.getKey() + ", value: " + entry.getValue()[0]);
+			System.out.println(entry.getKey() + "=" + entry.getValue()[0]);
 		}
 		
 		return map;
@@ -153,50 +157,5 @@ public class HttpSupport {
                 
         return text.toString();
     }
-	
-	
-	/*
-	 * redo this using OAuth, not signpost.
-	public static String doSignedPost(String address, Map<String,String> params, String key, String secret) {
-		try {
-			
-			System.out.println("secret: " + secret);
-			System.out.println("key: " + key);
 
-			
-			OAuthConsumer consumer = new CommonsHttpOAuthConsumer(key,secret);
-	        consumer.setTokenWithSecret(key, secret);
-
-	        System.out.println("Request token: " + consumer.getToken());
-	        System.out.println("Token secret: " + consumer.getTokenSecret());
-	        
-	        
-	        HttpClient httpclient = new DefaultHttpClient();
-			HttpPost httppost = new HttpPost(address);
-			
-	        List<NameValuePair> formparams = new ArrayList<NameValuePair>();
-	        
-	        for (Map.Entry<String,String> entry : params.entrySet()) {
-	        	formparams.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
-				
-				System.out.println(entry.getKey() + ":" + entry.getValue());
-			}
-	        UrlEncodedFormEntity entity = new UrlEncodedFormEntity(formparams, "UTF-8");
-			httppost.setEntity(entity);
-			
-			// sign the request
-	        consumer.sign(httppost);
-			
-			HttpResponse response = httpclient.execute(httppost);
-			String responseContent = Streams.asString(response.getEntity().getContent());
-			
-			return responseContent;
-			
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		} 
-		return null;
-	}
-	*/
 }

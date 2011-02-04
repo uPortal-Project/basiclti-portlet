@@ -14,7 +14,6 @@
 		<supports>
 			<mime-type>text/html</mime-type>
 			<portlet-mode>VIEW</portlet-mode>
-			<portlet-mode>EDIT</portlet-mode>
 		</supports>
 		<supported-locale>en</supported-locale>
 		<portlet-info>
@@ -23,14 +22,21 @@
 			<keywords>connector, basiclti, lti</keywords>
 		</portlet-info>
 		
-		<!-- pages -->
+		<!-- This application's Basic LTI key -->
+		<init-param>
+   			<name>key</name>
+   			<value>lmsng.school.edu</value>
+		</init-param>
+		<init-param>
+   			<name>secret</name>
+   			<value>secret</value>
+		</init-param>
+		
+		
+		<!-- Pages: do not adjust -->
 		<init-param>
 			<name>viewUrl</name>
 			<value>/pages/view.jsp</value>
-		</init-param>
-		<init-param>
-			<name>editUrl</name>
-			<value>/pages/edit.jsp</value>
 		</init-param>
 		<init-param>
 			<name>proxyUrl</name>
@@ -41,46 +47,46 @@
 			<value>/pages/error.jsp</value>
 		</init-param>
 		
-		<!-- basiclti params -->
+		
+		
+		
+		<!-- Adapter classes: do not adjust unless you have created your own adapter -->
 		<init-param>
-   			<name>key</name>
-   			<value>my.anu.edu.au</value>
+   			<name>standard-adapter-class</name>
+   			<value>au.edu.anu.portal.portlets.basiclti.adapters.StandardAdapter</value>
 		</init-param>
-		
-		<!-- NOTE: you must also set the secret and endpoint params in web.xml -->
-		
-		<!-- default preferences -->
-		<portlet-preferences>
-         	<!-- 
-         	<preferences-validator>
-				au.edu.anu.portal.portlets.basiclti.validators.BasicLTIPreferencesValidator
-			</preferences-validator>
-			-->
-      	</portlet-preferences>
+		<init-param>
+   			<name>sakai-adapter-class</name>
+   			<value>au.edu.anu.portal.portlets.basiclti.adapters.SakaiAdapter</value>
+		</init-param>
+		<init-param>
+   			<name>peoplesoft-adapter-class</name>
+   			<value>au.edu.anu.portal.portlets.basiclti.adapters.PeoplesoftAdapter</value>
+		</init-param>
 		
 		
 	</portlet>
 	
-	<!--  portlet user attributes -->
+	<!--  Portlet user attributes: generally you don't need to adjust these unless the attributes are mapped differently to below. -->
 	<user-attribute>
-		<description>Username</description>
 		<name>username</name>
+		<description>Username attribute</description>
 	</user-attribute>
 	<user-attribute>
-		<description>Given Name</description>
 		<name>givenName</name>
+		<description>Given Name attribute</description>
 	</user-attribute>
 	<user-attribute>
-		<description>Family Name</description>
 		<name>sn</name>
+		<description>Family Name attribute</description>
 	</user-attribute>
 	<user-attribute>
-		<description>Email</description>
 		<name>mail</name>
+		<description>Email attribute</description>
 	</user-attribute>
 	<user-attribute>
-		<description>Display Name</description>
 		<name>displayName</name>
+		<description>Display Name attribute</description>
 	</user-attribute>
    
 </portlet-app>

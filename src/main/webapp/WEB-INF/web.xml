@@ -5,10 +5,5 @@
 	 version="2.4">
 
    	<display-name>basiclti-portlet</display-name>
-	
-	<context-param>
-		<param-name>secret</param-name>
-		<param-value>secret</param-value>
-	</context-param>
-		
+  	
 </web-app>

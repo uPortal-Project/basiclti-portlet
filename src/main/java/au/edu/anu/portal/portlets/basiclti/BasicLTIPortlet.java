@@ -4,26 +4,30 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
 import javax.portlet.GenericPortlet;
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
-import javax.portlet.PortletMode;
-import javax.portlet.PortletModeException;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletRequestDispatcher;
-import javax.portlet.ReadOnlyException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
-import javax.portlet.ValidatorException;
+
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import au.edu.anu.portal.portlets.basiclti.adapters.BasicLTIAdapterFactory;
+import au.edu.anu.portal.portlets.basiclti.adapters.IBasicLTIAdapter;
+import au.edu.anu.portal.portlets.basiclti.support.CollectionsSupport;
 import au.edu.anu.portal.portlets.basiclti.support.HttpSupport;
+import au.edu.anu.portal.portlets.basiclti.support.OAuthSupport;
 import au.edu.anu.portal.portlets.basiclti.utils.Constants;
 import au.edu.anu.portal.portlets.basiclti.utils.Messages;
 
@@ -42,86 +46,46 @@ public class BasicLTIPortlet extends GenericPortlet{
 	
 	// pages
 	private String viewUrl;
-	private String editUrl;
 	private String proxyUrl;
 	private String errorUrl;
 	
 	// params
 	private String key;
-	
-	// local
-	private boolean replayForm;
-	private boolean isValid;
+	private String secret;
 
-		
+	//adapter classes
+	private Map<String,String> adapterClasses;
+	
+	//cache
+	private Cache cache;
+	private final String CACHE_NAME = "au.edu.anu.portal.portlets.BasicLTIPortletCache";
 	
 	public void init(PortletConfig config) throws PortletException {	   
 	   super.init(config);
-	   log.info("Basic LTI PortletDispatcher init()");
+	   log.info("Basic LTI Portlet init()");
 	   
-	   //get pages
+	   //pages
 	   viewUrl = config.getInitParameter("viewUrl");
 	   proxyUrl = config.getInitParameter("proxyUrl");
 	   errorUrl = config.getInitParameter("errorUrl");
 
-	   //get params
+	   //params
 	   key = config.getInitParameter("key");
+	   secret = config.getInitParameter("secret");
+
+	   
+	   //adapter classes
+	   adapterClasses = new HashMap<String,String>();
+	   adapterClasses.put("standard", config.getInitParameter("standard-adapter-class"));
+	   adapterClasses.put("sakai", config.getInitParameter("sakai-adapter-class"));
+	   adapterClasses.put("peoplesoft", config.getInitParameter("peoplesoft-adapter-class"));
+
+	   //setup cache
+	   CacheManager manager = new CacheManager();
+	   cache = manager.getCache(CACHE_NAME);
 	   
 	}
 	
-	/**
-	 * Process any portlet actions
-	 */
-	public void processAction(ActionRequest request, ActionResponse response) {
-		
-		if(request.getPortletMode().equals(PortletMode.EDIT)) {
-			replayForm = false;
-			isValid = false;
-			
-			//get prefs and submitted values
-			PortletPreferences prefs = request.getPreferences();
-			String portletHeight = request.getParameter("portletHeight");
-			String portletTitle = request.getParameter("portletTitle");
-			
-			
-			//portlet title could be blank, set to default
-			if(StringUtils.isBlank(portletTitle)){
-				portletTitle=Constants.PORTLET_TITLE_DEFAULT;
-			}
-			
-			//form ok so validate
-			try {
-				prefs.setValue("portletHeight", portletHeight);
-				prefs.setValue("portletTitle", portletTitle);
-			} catch (ReadOnlyException e) {
-				response.setRenderParameter("errorMessage", Messages.getString("error.form.readonly.error"));
-				log.error(e);
-			}
-			
-			//save them
-			try {
-				prefs.store();
-				isValid=true;
-			} catch (ValidatorException e) {
-				response.setRenderParameter("errorMessage", e.getMessage());
-				log.error(e);
-			} catch (IOException e) {
-				response.setRenderParameter("errorMessage", Messages.getString("error.form.save.error"));
-				log.error(e);
-			}
-			
-			//if ok, return to view
-			if(isValid) {
-				try {
-					response.setPortletMode(PortletMode.VIEW);
-				} catch (PortletModeException e) {
-					e.printStackTrace();
-				}
-			}
-			
-		}
-	}
-
 	
 	/**
 	 * Render the main view
@@ -130,7 +94,7 @@ public class BasicLTIPortlet extends GenericPortlet{
 		log.info("Basic LTI doView()");
 		
 		//get data
-		Map<String,String> launchData = getLaunchData(request, response);
+		Map<String,String> launchData = setupLaunchData(request, response);
 		
 		//catch - errors already handled
 		if(launchData == null) {
@@ -146,7 +110,7 @@ public class BasicLTIPortlet extends GenericPortlet{
 		proxy.append(HttpSupport.serialiseMapToQueryString(launchData));
 		
 		request.setAttribute("proxyContextUrl", proxy.toString());
-		request.setAttribute("preferredHeight", getPreferredPortletHeight(request));
+		request.setAttribute("preferredHeight", getConfiguredPortletHeight(request));
 		
 		dispatch(request, response, viewUrl);
 	}	
@@ -172,61 +136,98 @@ public class BasicLTIPortlet extends GenericPortlet{
 	}
 	
 	/**
-	 * Setup the Map of params for the request
+	 * Get the appropriate adapter class for this configured portlet instance
+	 * @param request
+	 * @return
+	 */
+	private String getAdapterClassName(RenderRequest request) {
+		return adapterClasses.get(getConfiguredProviderType(request));
+	}
+	
+	/**
+	 * Setup the parameters for the request
 	 * @param request
 	 * @param response
 	 * @return Map of params or null if any required data is missing
 	 */
-	private Map<String,String> getLaunchData(RenderRequest request, RenderResponse response) {
+	private Map<String,String> setupLaunchData(RenderRequest request, RenderResponse response) {
 		
-		//TODO need to get the data
-		//maybe just deserialise the XML back out into an object?
-		//need to send across all valid basic LTI fields as we don't know what provider we are connecting to.
+		Map<String,String> params = new HashMap<String,String>();
 		
+		//check cache, otherwise form up all of the data
+		String cacheKey = getPortletNamespace(response);
+		Element element = cache.get(cacheKey);
+		if(element != null) {
+			log.info("Fetching data from cache for: " + cacheKey);
+			params = (Map<String, String>) element.getObjectValue();
+		} else {
 		
-		//get user info
-		Map<String,String> userInfo = getUserInfo(request);
-		
-		//setup launch map
-		Map<String,String> props = new HashMap<String,String>();
+			//get the configured launch data
+			String rawLaunchData = getConfiguredLaunchData(request);
+			
+			//process it to a map
+			params = CollectionsSupport.splitStringToMap(rawLaunchData, ";;", "=", true);
+			
+			//setup adapter
+			String adapterClassName = getAdapterClassName(request);
+			String providerType = getConfiguredProviderType(request);
 
-		//optional fields - we don't need this since we are a truster consumer
-		//props.put("lis_person_sourcedid","school.edu:user");
-		//props.put("roles","Instructor");
-		//props.put("context_title","Design of Personal Environments");
-		//props.put("context_label","SI182");
-		//props.put("tool_consumer_instance_description", "Australian National University");
+			if(log.isDebugEnabled()) {
+				log.info("Adapter: " + adapterClassName);
+				log.info("ProviderType: " + providerType);
+			}
+	
+			//get user info
+			Map<String,String> userInfo = getUserInfo(request);
+			
+			//add required user fields
+			params.put("user_id", userInfo.get("username"));
+			params.put("lis_person_name_given", userInfo.get("givenName"));
+			params.put("lis_person_name_family", userInfo.get("sn"));
+			params.put("lis_person_name_full", userInfo.get("displayName"));
+			params.put("lis_person_contact_email_primary", "steve.swinsburg@anu.edu.au");
+			
+			//add required basic LTI fields
+			params.put("resource_link_id", getPortletNamespace(response));
+			params.put("tool_consumer_instance_guid", key);
+			
+			
+			//process the params according to the adapter in use
+			BasicLTIAdapterFactory factory = new BasicLTIAdapterFactory();
+			IBasicLTIAdapter adapter = factory.newAdapter(getAdapterClassName(request));  
+			params = adapter.processLaunchData(params);
 		
-		//required fields
-		props.put("user_id", userInfo.get("username"));
-		props.put("lis_person_name_given", userInfo.get("givenName"));
-		props.put("lis_person_name_family", userInfo.get("sn"));
-		props.put("lis_person_name_full", userInfo.get("displayName"));
-		props.put("lis_person_contact_email_primary", userInfo.get("email"));
-		props.put("resource_link_id", getPortletNamespace(response));
-		//props.put("context_id", preferredRemoteSiteId);
-		props.put("tool_consumer_instance_guid", key);
-		props.put("lti_version","LTI-1p0");
-		props.put("lti_message_type","basic-lti-launch-request");
-		props.put("oauth_callback","about:blank");
-		props.put("basiclti_submit", "Launch Endpoint with BasicLTI Data");
-		//props.put("user_id", remoteUserId);
+			if(log.isDebugEnabled()) {
+				log.debug("Parameter map before OAuth signing");
+				CollectionsSupport.printMap(params);
+			}
+			
+			//cache the data, must be done before signing
+			log.info("Adding data to cache for: " + cacheKey);
+			cache.put(new Element(cacheKey, params));
+			
+		}
 		
-		//additional fields
-		//props.put("remote_tool_id", preferredRemoteToolId);
+		//sign the properties map
+		params = OAuthSupport.signProperties(params.get("endpoint_url"), params, "POST", key, secret);
+
+		if(log.isDebugEnabled()) {
+			log.debug("Parameter map after OAuth signing");
+			CollectionsSupport.printMap(params);
+		}
 		
-		return props;
+		return params;
 	}
 	
 	
 	/**
-	 * Get the preferred portlet height if set, or default from Constants
+	 * Get the provider type from the preferences/configuration, or default from Constants
 	 * @param request
 	 * @return
 	 */
-	private int getPreferredPortletHeight(RenderRequest request) {
+	private String getConfiguredProviderType(RenderRequest request) {
 	      PortletPreferences pref = request.getPreferences();
-	      return Integer.parseInt(pref.getValue("portletHeight", String.valueOf(Constants.PORTLET_HEIGHT_DEFAULT)));
+	      return pref.getValue("provider_type", Constants.DEFAULT_PROVIDER_TYPE);
 	}
 	
 	/**
@@ -234,10 +235,31 @@ public class BasicLTIPortlet extends GenericPortlet{
 	 * @param request
 	 * @return
 	 */
-	private String getPreferredPortletTitle(RenderRequest request) {
+	private String getConfiguredPortletTitle(RenderRequest request) {
 		PortletPreferences pref = request.getPreferences();
-		return pref.getValue("portletTitle", Constants.PORTLET_TITLE_DEFAULT);
+		return pref.getValue("portlet_title", Constants.PORTLET_TITLE_DEFAULT);
 	}
+	
+	/**
+	 * Get the preferred portlet height if set, or default from Constants
+	 * @param request
+	 * @return
+	 */
+	private int getConfiguredPortletHeight(RenderRequest request) {
+	      PortletPreferences pref = request.getPreferences();
+	      return Integer.parseInt(pref.getValue("portlet_height", String.valueOf(Constants.PORTLET_HEIGHT_DEFAULT)));
+	}
+	
+	/**
+	 * Get the launch data from the preferences/configuration, no default.
+	 * @param request
+	 * @return
+	 */
+	private String getConfiguredLaunchData(RenderRequest request) {
+		PortletPreferences pref = request.getPreferences();
+		return pref.getValue("launch_data", "");
+	}
+	
 	
 	/**
 	 * Get the current username
@@ -255,9 +277,12 @@ public class BasicLTIPortlet extends GenericPortlet{
 	 */
 	@Override
 	protected String getTitle(RenderRequest request) {
-		return getPreferredPortletTitle(request);
+		return getConfiguredPortletTitle(request);
 	}
 	
+	
+	
+
 	/**
 	 * Helper to handle error messages
 	 * @param messageKey	Message bundle key
@@ -305,7 +330,6 @@ public class BasicLTIPortlet extends GenericPortlet{
 	public void destroy() {
 		log.info("destroy()");
 	}
-	
 	
 	
 }
