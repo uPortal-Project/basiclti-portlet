@@ -105,7 +105,7 @@ public class HttpSupport {
 		for (Map.Entry<String,String[]> entry : params.entrySet()) {
 			map.put(entry.getKey(), entry.getValue()[0]);
 			//log.info("key: " + entry.getKey() + ", value: " + entry.getValue()[0]);
-			System.out.println(entry.getKey() + "=" + entry.getValue()[0]);
+			//System.out.println(entry.getKey() + "=" + entry.getValue()[0]);
 		}
 		
 		return map;
