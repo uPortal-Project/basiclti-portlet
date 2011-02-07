@@ -58,7 +58,7 @@ public class BasicLTIPortlet extends GenericPortlet{
 	
 	//cache
 	private Cache cache;
-	private final String CACHE_NAME = "au.edu.anu.portal.portlets.BasicLTIPortletCache";
+	private final String CACHE_NAME = "au.edu.anu.portal.portlets.cache.BasicLTIPortletCache";
 	
 	public void init(PortletConfig config) throws PortletException {	   
 	   super.init(config);
@@ -197,15 +197,15 @@ public class BasicLTIPortlet extends GenericPortlet{
 			IBasicLTIAdapter adapter = factory.newAdapter(getAdapterClassName(request));  
 			params = adapter.processLaunchData(params);
 		
-			if(log.isDebugEnabled()) {
-				log.debug("Parameter map before OAuth signing");
-				CollectionsSupport.printMap(params);
-			}
-			
 			//cache the data, must be done before signing
 			log.info("Adding data to cache for: " + cacheKey);
 			cache.put(new Element(cacheKey, params));
 			
+		}
+		
+		if(log.isDebugEnabled()) {
+			log.debug("Parameter map before OAuth signing");
+			CollectionsSupport.printMap(params);
 		}
 		
 		//sign the properties map

@@ -153,6 +153,12 @@
 			<version>20090825</version>
 		</dependency>
 		
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.16</version>
+		</dependency>
+		
 		<!-- ehcache, requires a slf4j impl-->
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
@@ -233,12 +239,13 @@
 	<build>
 		<finalName>${war.name}</finalName>
 		<resources>
-			<!-- 
+			<!--  include log4j.properties -->
 			<resource>
 				<filtering>false</filtering>
 				<directory>src/main/resources</directory>
 			</resource>
-			-->
+			
+			<!--  include i18n properties -->
 			<resource>
 				<filtering>false</filtering>
 				<directory>src/main/java</directory>

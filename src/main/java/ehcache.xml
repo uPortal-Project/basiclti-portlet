@@ -13,7 +13,7 @@
     />
 
     <!-- pebble quota cache: ttl = 6 hours -->
-    <cache name="au.edu.anu.portal.portlets.BasicLTIPortletCache"
+    <cache name="au.edu.anu.portal.portlets.cache.BasicLTIPortletCache"
         maxElementsInMemory="10000"
         eternal="false"
         timeToLiveSeconds="21600" 
