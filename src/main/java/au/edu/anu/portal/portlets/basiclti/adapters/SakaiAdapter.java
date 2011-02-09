@@ -47,6 +47,8 @@ public class SakaiAdapter extends AbstractAdapter {
 		String context_id = params.get("context_id");
 		String user_id = params.get("user_id");
 		
+		System.out.println("user_id: " + user_id);
+		
 		if(StringUtils.equals(context_id, "~")){
 			params.put(EXT_SAKAI_PROVIDER_EID, user_id);
 		}

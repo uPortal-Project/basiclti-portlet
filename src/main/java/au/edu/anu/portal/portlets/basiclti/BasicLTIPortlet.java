@@ -52,6 +52,9 @@ public class BasicLTIPortlet extends GenericPortlet{
 	// params
 	private String key;
 	private String secret;
+	
+	//attribute mappings
+	private String attributeMappingForUsername;
 
 	//adapter classes
 	private Map<String,String> adapterClasses;
@@ -72,6 +75,7 @@ public class BasicLTIPortlet extends GenericPortlet{
 	   //params
 	   key = config.getInitParameter("key");
 	   secret = config.getInitParameter("secret");
+	   attributeMappingForUsername = config.getInitParameter("portal.attribute.mapping.username");
 
 	   
 	   //adapter classes
@@ -211,10 +215,10 @@ public class BasicLTIPortlet extends GenericPortlet{
 		//sign the properties map
 		params = OAuthSupport.signProperties(params.get("endpoint_url"), params, "POST", key, secret);
 
-		if(log.isDebugEnabled()) {
+		//if(log.isDebugEnabled()) {
 			log.debug("Parameter map after OAuth signing");
 			CollectionsSupport.printMap(params);
-		}
+		//}
 		
 		return params;
 	}
@@ -268,7 +272,8 @@ public class BasicLTIPortlet extends GenericPortlet{
 	 */
 	private String getAuthenticatedUsername(RenderRequest request) {
 		Map<String,String> userInfo = getUserInfo(request);
-		return userInfo.get("username");
+		//return userInfo.get("username");
+		return userInfo.get(attributeMappingForUsername);
 	}
 	
 	

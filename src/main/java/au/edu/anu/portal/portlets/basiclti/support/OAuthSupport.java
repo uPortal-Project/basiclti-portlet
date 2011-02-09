@@ -2,6 +2,7 @@ package au.edu.anu.portal.portlets.basiclti.support;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,12 @@ public class OAuthSupport {
 
 	private static final Log log = LogFactory.getLog(OAuthSupport.class.getName());
 
+	/**
+	 * Charset to encode params with 
+	 */
+	private final static String CHARSET= "UTF-8";
+	
+	
 	/**
 	 * Sign a property Map with OAuth.
 	 * @param url		the url where the request is to be made
@@ -52,7 +59,10 @@ public class OAuthSupport {
     
             Map<String,String> headers = new HashMap<String,String>();
             for (Map.Entry<String,String> e : params) {
-            	headers.put(e.getKey(), e.getValue());
+            	//as per the spec, params must be encoded
+            	String param = URLEncoder.encode(e.getKey(), CHARSET);
+            	String value = URLEncoder.encode(e.getValue(), CHARSET);
+            	headers.put(param, value);
             }
             return headers;
         } catch (OAuthException e) {
