@@ -1,0 +1,113 @@
+
+<channel-definition script="classpath://org/jasig/portal/io/import-channel_v3-2.crn">
+  <title>Basic LTI Portlet Demo</title>
+  <name>Basic LTI Portlet Demo</name>
+  <fname>basiclti-portlet</fname>
+  <desc>Basic LTI Portlet Demo</desc>
+  <type>Basic LTI</type>
+  <class>org.jasig.portal.channels.portlet.CSpringPortletAdaptor</class>
+  <timeout>5000</timeout>
+  <hasedit>N</hasedit>
+  <hashelp>N</hashelp>
+  <hasabout>N</hasabout>
+  <secure>N</secure>
+  <locale>en_US</locale>
+  <categories>
+    <category>Information</category>
+  </categories>
+  <groups>
+    <group>Everyone</group>
+  </groups>
+  <users/>
+  <parameters>
+    <parameter> 
+      <name>portletApplicationId</name>  
+      <!-- DO NOT CHANGE THIS (unless you change the deployed context of the portlet) -->
+      <value>/basiclti-portlet</value>  
+      <description></description>  
+      <ovrd>N</ovrd> 
+    </parameter>
+    <parameter> 
+      <name>portletName</name>  
+      <!-- change this to the fname that you want for this portlet instance -->
+      <value>basiclti-portlet</value>  
+      <description></description>  
+      <ovrd>N</ovrd> 
+    </parameter>
+  </parameters>
+  <portletPreferences>
+    <portletPreference> 
+    
+    <!-- Type of provider.
+    Optional. Defaults to 'standard' if not set.
+
+    This is because specially named attributes or special processing of attributes may need to be performed
+    before the launch data is sent. 
+    
+    If your provider requires any special information, you MUST set this otherwise the launch will fail.
+    
+    Currently supported values are:
+		- standard
+		- sakai
+    
+    Future support may include:
+    	- sakai_oae
+    	- moodle
+    	- peoplesoft
+    	- mediawiki
+    	- wordpress
+    -->
+      <name>provider_type</name>  
+      <values>
+        <value>standard</value>
+      </values> 
+    </portletPreference>
+    
+    <!-- Title for this portlet -->
+    <portletPreference>
+     <name>portlet_title</name>  
+      <values>
+        <value>Basic LTI Portlet</value>
+      </values> 
+    </portletPreference>
+    
+    <!-- Height for this portlet -->
+    <portletPreference>
+     <name>portlet_height</name>  
+      <values>
+        <value>600</value>
+      </values> 
+    </portletPreference>
+    
+    <!-- Launch data
+    Required.
+    
+    See http://www.imsglobal.org/lti/blti/bltiv1p0/ltiBLTIimgv1p0.html 
+
+    You must include:
+    	- the raw endpoint URL (endpoint_url)
+    	- all parameters that need to be sent in key=value form, with delimiter ;;
+    
+    Do not include:
+    	- any user attributes, these will be added before the request is sent.
+    	- any specific data on the endpoint URL. This will be catered for in the portlet itself, since you have set provider_type above.
+    	  The portlet will use the appropriate adapter to process the data before sending the request.
+    	- any default parameters about Basic LTI itself, these will be added automatically.
+	
+    
+    -->
+    <portletPreference> 
+      <name>launch_data</name>  
+      <values>
+        <value>
+        <![CDATA[
+endpoint_url=http://localhost/~steve/blti-php/tool.php;;
+context_id=some_context_id;;
+tool_id=some_tool_id;;
+some_other_param=some_value;;
+		]]>
+        </value>
+      </values> 
+    </portletPreference>  
+  </portletPreferences>      
+</channel-definition>
