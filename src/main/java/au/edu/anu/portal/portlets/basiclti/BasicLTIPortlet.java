@@ -215,10 +215,10 @@ public class BasicLTIPortlet extends GenericPortlet{
 		//sign the properties map
 		params = OAuthSupport.signProperties(params.get("endpoint_url"), params, "POST", key, secret);
 
-		//if(log.isDebugEnabled()) {
+		if(log.isDebugEnabled()) {
 			log.debug("Parameter map after OAuth signing");
 			CollectionsSupport.printMap(params);
-		//}
+		}
 		
 		return params;
 	}
