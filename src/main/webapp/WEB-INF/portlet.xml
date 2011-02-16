@@ -14,6 +14,7 @@
 		<supports>
 			<mime-type>text/html</mime-type>
 			<portlet-mode>VIEW</portlet-mode>
+			<portlet-mode>CONFIG</portlet-mode>
 		</supports>
 		<supported-locale>en</supported-locale>
 		<portlet-info>
@@ -58,6 +59,10 @@
 			<name>errorUrl</name>
 			<value>/pages/error.jsp</value>
 		</init-param>
+		<init-param>
+			<name>configUrl</name>
+			<value>/pages/config.jsp</value>
+		</init-param>
 		
 		
 		
@@ -100,5 +105,6 @@
 		<name>displayName</name>
 		<description>Display Name attribute</description>
 	</user-attribute>
+	
    
 </portlet-app>

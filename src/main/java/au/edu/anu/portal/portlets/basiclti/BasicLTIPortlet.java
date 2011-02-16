@@ -4,14 +4,20 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
 import javax.portlet.GenericPortlet;
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
+import javax.portlet.PortletMode;
+import javax.portlet.PortletModeException;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletRequestDispatcher;
+import javax.portlet.ReadOnlyException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+import javax.portlet.ValidatorException;
 
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
@@ -48,6 +54,7 @@ public class BasicLTIPortlet extends GenericPortlet{
 	private String viewUrl;
 	private String proxyUrl;
 	private String errorUrl;
+	private String configUrl;
 	
 	// params
 	private String key;
@@ -71,13 +78,13 @@ public class BasicLTIPortlet extends GenericPortlet{
 	   viewUrl = config.getInitParameter("viewUrl");
 	   proxyUrl = config.getInitParameter("proxyUrl");
 	   errorUrl = config.getInitParameter("errorUrl");
+	   configUrl = config.getInitParameter("configUrl");
 
 	   //params
 	   key = config.getInitParameter("key");
 	   secret = config.getInitParameter("secret");
 	   attributeMappingForUsername = config.getInitParameter("portal.attribute.mapping.username");
 
-	   
 	   //adapter classes
 	   adapterClasses = new HashMap<String,String>();
 	   adapterClasses.put("standard", config.getInitParameter("standard-adapter-class"));
@@ -87,7 +94,20 @@ public class BasicLTIPortlet extends GenericPortlet{
 	   //setup cache
 	   CacheManager manager = new CacheManager();
 	   cache = manager.getCache(CACHE_NAME);
-	   
+	}
+	
+	/**
+	 * Delegate to appropriate PortletMode.
+	 */
+	protected void doDispatch(RenderRequest request, RenderResponse response) throws PortletException, IOException {
+		log.info("Basic LTI doDispatch()");
+
+		if (StringUtils.equalsIgnoreCase(request.getPortletMode().toString(), "CONFIG")) {
+			doConfig(request, response);
+		}
+		else {
+			super.doDispatch(request, response);
+		}
 	}
 	
 	
@@ -105,7 +125,6 @@ public class BasicLTIPortlet extends GenericPortlet{
 			return;
 		}
 		
-		
 		//setup the params, serialise to a URL
 		StringBuilder proxy = new StringBuilder();
 		proxy.append(request.getContextPath());
@@ -118,6 +137,67 @@ public class BasicLTIPortlet extends GenericPortlet{
 		
 		dispatch(request, response, viewUrl);
 	}	
+	
+	
+	
+	
+	
+	protected void doConfig(RenderRequest request, RenderResponse response) throws PortletException, IOException {
+		log.info("Basic LTI doConfig()");
+
+		request.setAttribute("configuredPortletHeight", getConfiguredPortletHeight(request));
+		request.setAttribute("configuredPortletTitle", getConfiguredPortletTitle(request));
+		request.setAttribute("configuredProviderType", getConfiguredProviderType(request));
+		request.setAttribute("configuredLaunchData", getConfiguredLaunchData(request));
+		
+		dispatch(request, response, configUrl);
+	}
+	
+	public void processAction(ActionRequest request, ActionResponse response) {
+		log.info("Basic LTI processAction()");
+		
+		//At this stage we only ever accept actions from the CONFIG mode.
+		//If in future we allow user editing, then a check needs to be done here to see
+		//from what PortletMode the processAction was called (see doDispatch)
+		
+		boolean success = true;
+		//get prefs and submitted values
+		PortletPreferences prefs = request.getPreferences();
+		String portletHeight = request.getParameter("portletHeight");
+		String portletTitle = request.getParameter("portletTitle");
+		String providerType = request.getParameter("providerType");
+		String launchData = request.getParameter("launchData");
+		
+		//validate
+		try {
+			prefs.setValue("portlet_height", portletHeight);
+			prefs.setValue("portlet_title", portletTitle);
+			prefs.setValue("provider_type", providerType);
+			prefs.setValue("launch_data", launchData);
+		} catch (ReadOnlyException e) {
+			success = false;
+			response.setRenderParameter("errorMessage", Messages.getString("error.form.readonly.error"));
+			log.error(e);
+		}
+		
+		//save them
+		if(success) {
+			try {
+				prefs.store();
+				response.setPortletMode(PortletMode.VIEW);
+			} catch (ValidatorException e) {
+				response.setRenderParameter("errorMessage", e.getMessage());
+				log.error(e);
+			} catch (IOException e) {
+				response.setRenderParameter("errorMessage", Messages.getString("error.form.save.error"));
+				log.error(e);
+			} catch (PortletModeException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	
 			
 	/**
 	 * Get the current user's details, exposed via portlet.xml
@@ -204,7 +284,6 @@ public class BasicLTIPortlet extends GenericPortlet{
 			//cache the data, must be done before signing
 			log.info("Adding data to cache for: " + cacheKey);
 			cache.put(new Element(cacheKey, params));
-			
 		}
 		
 		if(log.isDebugEnabled()) {
@@ -284,8 +363,6 @@ public class BasicLTIPortlet extends GenericPortlet{
 	protected String getTitle(RenderRequest request) {
 		return getConfiguredPortletTitle(request);
 	}
-	
-	
 	
 
 	/**
