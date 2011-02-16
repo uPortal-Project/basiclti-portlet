@@ -143,7 +143,7 @@ pageContext.setAttribute("heights",heights);
 			    <p>Do not include:
 					<ul>
 					<li>any user attributes, these will be added before the request is sent.</li>
-					<li>any specific data on the endpoint URL. This will be catered for in the portlet itself, since you have set provider_type above. 
+					<li>any specific data on the endpoint URL. This will be catered for in the portlet itself, since you have set the Provider type. 
 						The portlet will use the appropriate adapter to process the data before sending the request.</li>
 					<li>any default parameters about Basic LTI itself, these will be added automatically.</li>
 					</ul>
