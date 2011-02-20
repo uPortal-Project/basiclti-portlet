@@ -124,7 +124,7 @@ pageContext.setAttribute("heights",heights);
 			    			<li>sakai_oae</li>
 		   					<li>moodle</li>
 		   					<li>mediawiki</li>
-		   					<li>wordpress<</li>
+		   					<li>wordpress</li>
 		   					<li>... anything that supports Basic LTI and has an adapter implementation in this portlet.</li>
 		   				</ul>
 		   			</p>
