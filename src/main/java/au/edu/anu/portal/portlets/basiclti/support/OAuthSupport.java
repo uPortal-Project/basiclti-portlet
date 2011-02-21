@@ -58,11 +58,12 @@ public class OAuthSupport {
             List<Map.Entry<String, String>> params = oam.getParameters();
     
             Map<String,String> headers = new HashMap<String,String>();
-            for (Map.Entry<String,String> e : params) {
+            for (Map.Entry<String,String> p : params) {
             	//as per the spec, params must be encoded
-            	String param = URLEncoder.encode(e.getKey(), CHARSET);
-            	String value = URLEncoder.encode(e.getValue(), CHARSET);
-            	headers.put(param, value);
+            	String param = URLEncoder.encode(p.getValue(), CHARSET);
+            	String value = p.getValue();
+                String encodedValue = value != null ? URLEncoder.encode(value, CHARSET) : "";
+            	headers.put(param, encodedValue);
             }
             return headers;
         } catch (OAuthException e) {
