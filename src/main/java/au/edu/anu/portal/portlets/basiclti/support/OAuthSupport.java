@@ -60,7 +60,7 @@ public class OAuthSupport {
             Map<String,String> headers = new HashMap<String,String>();
             for (Map.Entry<String,String> p : params) {
             	//as per the spec, params must be encoded
-            	String param = URLEncoder.encode(p.getValue(), CHARSET);
+            	String param = URLEncoder.encode(p.getKey(), CHARSET);
             	String value = p.getValue();
                 String encodedValue = value != null ? URLEncoder.encode(value, CHARSET) : "";
             	headers.put(param, encodedValue);
