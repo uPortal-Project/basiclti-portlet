@@ -140,8 +140,9 @@ public class BasicLTIPortlet extends GenericPortlet{
 	
 	
 	
-	
-	
+	/**
+	 * Custom mode handler for CONFIG view
+	 */
 	protected void doConfig(RenderRequest request, RenderResponse response) throws PortletException, IOException {
 		log.info("Basic LTI doConfig()");
 
@@ -153,6 +154,9 @@ public class BasicLTIPortlet extends GenericPortlet{
 		dispatch(request, response, configUrl);
 	}
 	
+	/**
+	 * Process any portlet actions. At this stage they are all from the submission of the CONFIG mode.
+	 */
 	public void processAction(ActionRequest request, ActionResponse response) {
 		log.info("Basic LTI processAction()");
 		
