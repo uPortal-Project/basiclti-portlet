@@ -32,15 +32,6 @@ public abstract class AbstractAdapter implements IBasicLTIAdapter  {
 		defaultParams.put("oauth_callback","about:blank");
 		defaultParams.put("basiclti_submit","null");
 		
-		//optional
-		//props.put("lis_person_sourcedid","school.edu:user");
-		//props.put("roles","Instructor");
-		//props.put("context_title","Design of Personal Environments");
-		//props.put("context_label","SI182");
-		//props.put("tool_consumer_instance_description", "Australian National University");
-		//props.put("launch_presentation_css_url","http://localhost:8081/library/skin/default/tool.css");
-
-		
 		return defaultParams;
 	}
 	

@@ -52,7 +52,7 @@ public class SakaiAdapter extends AbstractAdapter {
 		}
 		
 		//add defaults
-		params.putAll(getDefaultParameters());
+		params.putAll(super.getDefaultParameters());
 		
 		return params;
 		

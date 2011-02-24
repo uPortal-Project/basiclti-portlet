@@ -24,8 +24,8 @@ import java.util.Map;
  * <li>Do any parameters need to be adjusted before they are sent?</li>
  * </ol>
  *  
- * <p>If yes, create an adapter that does these things by implementing this class.
- *  You will also need to add some logic to BasicLTIPortlet to add provision for calling this class based on the provider_type.</p>
+ * <p>If yes, create an adapter that does these things by extending AbstractAdapter (which implement this class for you) and wire it up in portlet.xml.</p>
+ * <p>Note: You must always add the default set of Basic LTI parameters from AbstractAdapter</p>
  *
  * @author Steve Swinsburg (steve.swinsburg@anu.edu.au)
  *

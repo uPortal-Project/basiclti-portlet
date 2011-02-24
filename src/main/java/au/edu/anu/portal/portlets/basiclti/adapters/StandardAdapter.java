@@ -28,7 +28,8 @@ public class StandardAdapter extends AbstractAdapter {
 		
 		log.error("StandardAdapter.processLaunchData() called");
 
-		params.putAll(getDefaultParameters());
+		//add defaults
+		params.putAll(super.getDefaultParameters());
 		
 		return params;
 	}

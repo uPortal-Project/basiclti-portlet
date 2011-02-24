@@ -31,7 +31,7 @@ public class PeoplesoftAdapter extends AbstractAdapter {
 		params.put("user_id", StringUtils.upperCase(params.get("user_id")));
 		
 		//add defaults
-		params.putAll(getDefaultParameters());
+		params.putAll(super.getDefaultParameters());
 		
 		return params;
 		
