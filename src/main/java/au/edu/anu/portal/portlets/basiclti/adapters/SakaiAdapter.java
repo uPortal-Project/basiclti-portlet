@@ -27,7 +27,7 @@ public class SakaiAdapter extends AbstractAdapter {
 	/**
 	 * Modifies the map of params to append the tool_id to the endpoint URL.
 	 * 
-	 * Also looks for a ~ as the context_id and then sets an additional Sakai specific property
+	 * Also adds an additional property to signal we are sending the eid instead of the uuid
 	 * 
 	 * @param params	map of launch data params
 	 * @return the map, modified
@@ -43,13 +43,9 @@ public class SakaiAdapter extends AbstractAdapter {
 		
 		params.put("endpoint_url", endpoint_url + tool_id);
 		
-		//setup ext_sakai_provider_eid if context_id is ~
-		String context_id = params.get("context_id");
+		//add ext_sakai_provider_eid 
 		String user_id = params.get("user_id");
-		
-		if(StringUtils.equals(context_id, "~")){
-			params.put(EXT_SAKAI_PROVIDER_EID, user_id);
-		}
+		params.put(EXT_SAKAI_PROVIDER_EID, user_id);
 		
 		//add defaults
 		params.putAll(super.getDefaultParameters());
