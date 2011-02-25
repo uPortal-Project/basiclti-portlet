@@ -26,7 +26,7 @@
 		<!-- This application's Basic LTI key -->
 		<init-param>
    			<name>key</name>
-   			<value>my.anu.edu.au</value>
+   			<value>my.school.edu.au</value>
 		</init-param>
 		<init-param>
    			<name>secret</name>
