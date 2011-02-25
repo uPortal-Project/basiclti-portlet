@@ -34,6 +34,13 @@
       <description></description>  
       <ovrd>N</ovrd> 
     </parameter>
+    <parameter> 
+      <name>allowRestart</name> 
+      <!-- renders a restart icon for the portlet. Recommended. --> 
+      <value>true</value>  
+      <description></description>  
+      <ovrd>N</ovrd> 
+    </parameter>
   </parameters>
   <portletPreferences>
     <portletPreference> 
