@@ -35,7 +35,7 @@ public class SakaiAdapter extends AbstractAdapter {
 	@Override
 	public Map<String, String> processLaunchData(Map<String, String> params) {
 		
-		log.info("SakaiAdapter.processLaunchData() called");
+		log.debug("SakaiAdapter.processLaunchData() called");
 		
 		//add tool_id to endpoint_url
 		String tool_id = params.get("tool_id");

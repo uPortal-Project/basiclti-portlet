@@ -26,7 +26,7 @@ public class StandardAdapter extends AbstractAdapter {
 	@Override
 	public Map<String,String> processLaunchData(Map<String,String> params){
 		
-		log.error("StandardAdapter.processLaunchData() called");
+		log.debug("StandardAdapter.processLaunchData() called");
 
 		//add defaults
 		params.putAll(super.getDefaultParameters());

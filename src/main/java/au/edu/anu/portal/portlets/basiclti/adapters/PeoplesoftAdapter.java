@@ -26,7 +26,7 @@ public class PeoplesoftAdapter extends AbstractAdapter {
 	@Override
 	public Map<String, String> processLaunchData(Map<String, String> params) {
 		
-		log.error("PeoplesoftAdapter.processLaunchData() called");
+		log.debug("PeoplesoftAdapter.processLaunchData() called");
 		
 		params.put("user_id", StringUtils.upperCase(params.get("user_id")));
 		
