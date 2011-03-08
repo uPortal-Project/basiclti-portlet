@@ -2,7 +2,6 @@ package au.edu.anu.portal.portlets.basiclti.utils;
 
 public class Constants {
 
-	/* portlet height settings */
 	public static final int PORTLET_HEIGHT_400 = 400;
 	public static final int PORTLET_HEIGHT_600 = 600;
 	public static final int PORTLET_HEIGHT_800 = 800;
@@ -14,7 +13,5 @@ public class Constants {
 	public static final String PORTLET_TITLE_DEFAULT="Basic LTI Portlet";
 	
 	public static final String DEFAULT_PROVIDER_TYPE="standard";
- 
-
 	
 }

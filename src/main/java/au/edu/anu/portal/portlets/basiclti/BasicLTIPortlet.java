@@ -3,6 +3,7 @@ package au.edu.anu.portal.portlets.basiclti;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -14,6 +15,7 @@ import javax.portlet.PortletModeException;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletRequestDispatcher;
+import javax.portlet.PortletSession;
 import javax.portlet.ReadOnlyException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
@@ -56,10 +58,6 @@ public class BasicLTIPortlet extends GenericPortlet{
 	private String errorUrl;
 	private String configUrl;
 	
-	// params
-	private String key;
-	private String secret;
-	
 	//attribute mappings
 	private String attributeMappingForUsername;
 
@@ -81,8 +79,6 @@ public class BasicLTIPortlet extends GenericPortlet{
 	   configUrl = config.getInitParameter("configUrl");
 
 	   //params
-	   key = config.getInitParameter("key");
-	   secret = config.getInitParameter("secret");
 	   attributeMappingForUsername = config.getInitParameter("portal.attribute.mapping.username");
 
 	   //adapter classes
@@ -150,7 +146,9 @@ public class BasicLTIPortlet extends GenericPortlet{
 		request.setAttribute("configuredPortletTitle", getConfiguredPortletTitle(request));
 		request.setAttribute("configuredProviderType", getConfiguredProviderType(request));
 		request.setAttribute("configuredLaunchData", getConfiguredLaunchData(request));
-		
+		request.setAttribute("key", getBasicLTIKey(request));
+		request.setAttribute("secret", getBasicLTISecret(request));
+
 		dispatch(request, response, configUrl);
 	}
 	
@@ -171,6 +169,11 @@ public class BasicLTIPortlet extends GenericPortlet{
 		String portletTitle = request.getParameter("portletTitle");
 		String providerType = request.getParameter("providerType");
 		String launchData = request.getParameter("launchData");
+		String key = request.getParameter("key");
+		String secret = request.getParameter("secret");
+		
+		//get version form prefs and increment it.
+		int newVersion = Integer.valueOf(prefs.getValue("version", "0")) + 1;
 		
 		//validate
 		try {
@@ -178,6 +181,9 @@ public class BasicLTIPortlet extends GenericPortlet{
 			prefs.setValue("portlet_title", portletTitle);
 			prefs.setValue("provider_type", providerType);
 			prefs.setValue("launch_data", launchData);
+			prefs.setValue("key", key);
+			prefs.setValue("secret", secret);
+			prefs.setValue("version", String.valueOf(newVersion));
 		} catch (ReadOnlyException e) {
 			success = false;
 			response.setRenderParameter("errorMessage", Messages.getString("error.form.readonly.error"));
@@ -242,6 +248,29 @@ public class BasicLTIPortlet extends GenericPortlet{
 		
 		Map<String,String> params = new HashMap<String,String>();
 		
+		//get essential Basic LTI config
+		String key = getBasicLTIKey(request);
+		String secret = getBasicLTISecret(request);
+
+		if(StringUtils.isBlank(key) || StringUtils.isBlank(secret)) {
+			log.error("Basic LTI key/secret was blank. Please configure this portlet.");
+			doError("error.no.basiclti.config", "error.heading.general", request, response);
+			return null;
+		}
+		
+		//check for the version of the preference and see if we need to reset the cache
+		int prefVersion = getPreferenceVersion(request);
+		PortletSession session = request.getPortletSession();
+		Integer cachedVersion  = (Integer)session.getAttribute("version");
+		if(cachedVersion != null) {
+			log.info("preference version: " + prefVersion + ", cached version: " + cachedVersion);
+		
+			if(prefVersion > cachedVersion.intValue()) {
+				log.info("Cache is dirty");
+				evictFromCache(getPortletNamespace(response));
+			}
+		}
+		
 		//check cache, otherwise form up all of the data
 		String cacheKey = getPortletNamespace(response);
 		Element element = cache.get(cacheKey);
@@ -288,6 +317,13 @@ public class BasicLTIPortlet extends GenericPortlet{
 			//cache the data, must be done before signing
 			log.info("Adding data to cache for: " + cacheKey);
 			cache.put(new Element(cacheKey, params));
+			
+			//also update the portlet session attribute for the preference version
+			//but only if we have a valid version 
+			if(prefVersion > -1) {
+				log.info("Adding version to PortletSession: " + prefVersion);
+				session.setAttribute("version", prefVersion);
+			}
 		}
 		
 		if(log.isDebugEnabled()) {
@@ -347,6 +383,41 @@ public class BasicLTIPortlet extends GenericPortlet{
 		return pref.getValue("launch_data", "");
 	}
 	
+	/**
+	 * Get the configured Basic LTI key, no default.
+	 * @param request
+	 * @return
+	 */
+	private String getBasicLTIKey(RenderRequest request) {
+		PortletPreferences pref = request.getPreferences();
+		return pref.getValue("key", "");
+	}
+
+	/**
+	 * Get the configured Basic LTI secret, no default.
+	 * @param request
+	 * @return
+	 */
+	private String getBasicLTISecret(RenderRequest request) {
+		PortletPreferences pref = request.getPreferences();
+		return pref.getValue("secret", "");
+	}
+	
+	/**
+	 * Get the version of this configuration instance used to check if the cache is expired.
+	 * This value is incremented each time the config is updated.
+	 * Default is -1 to signal there is no stored preference
+	 * 
+	 * Do not use this for getting the number that we need to increment.
+	 * 
+	 * @param request
+	 * @return
+	 */
+	private int getPreferenceVersion(RenderRequest request) {
+		PortletPreferences pref = request.getPreferences();
+		return Integer.parseInt(pref.getValue("version", "-1"));
+	}
+		
 	
 	/**
 	 * Get the current username
@@ -367,6 +438,16 @@ public class BasicLTIPortlet extends GenericPortlet{
 	protected String getTitle(RenderRequest request) {
 		return getConfiguredPortletTitle(request);
 	}
+	
+	/**
+	 * Helper to evict an item from a cache. If we visit the edit mode, we must evict the current data. It will be re-cached later.
+	 * @param cacheKey	the id for the data in the cache
+	 */
+	private void evictFromCache(String cacheKey) {
+		cache.remove(cacheKey);
+		log.info("Evicted data in cache for key: " + cacheKey);
+	}
+
 	
 
 	/**

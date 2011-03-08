@@ -9,7 +9,7 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * This adapter processes the endpoint_url to append the tool_id to the end.
- * It also does some stuff with the userID (to be documented)
+ * It also sets an additional property to send the user_id 
  * 
  * @author Steve Swinsburg (steve.swinsburg@anu.edu.au)
  *
@@ -19,7 +19,7 @@ public class SakaiAdapter extends AbstractAdapter {
 	private final Log log = LogFactory.getLog(getClass().getName());
 	
 	/**
-	 * Added to the map only when context_id=~. This parameter contains the eid of the user.
+	 * This parameter is added to the map and contains the eid of the user.
 	 */
 	private final String EXT_SAKAI_PROVIDER_EID = "ext_sakai_provider_eid";
 	
@@ -43,7 +43,7 @@ public class SakaiAdapter extends AbstractAdapter {
 		
 		params.put("endpoint_url", endpoint_url + tool_id);
 		
-		//add ext_sakai_provider_eid 
+		//add ext_sakai_provider_eid param containing the user_id
 		String user_id = params.get("user_id");
 		params.put(EXT_SAKAI_PROVIDER_EID, user_id);
 		

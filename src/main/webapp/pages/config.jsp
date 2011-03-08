@@ -96,6 +96,12 @@ pageContext.setAttribute("heights",heights);
 			<p><fmt:message key="config.portlet.launchdata" /></p>
 			<textarea name="launchData" rows="20" cols="80">${configuredLaunchData}</textarea>
 			
+			<p><fmt:message key="config.portlet.basiclti.key" /></p>
+			<input type="text" name="key" value="${key}" />
+			
+			<p><fmt:message key="config.portlet.basiclti.secret" /></p>
+			<input type="text" name="secret" value="${secret}" />
+			
 			<p>
 	 			<input type="submit" value="<fmt:message key='config.button.submit' />">
 			</p>
@@ -152,8 +158,14 @@ pageContext.setAttribute("heights",heights);
 				<p>For more info on the Basic LTI launch params, see 
 					<a href="http://www.imsglobal.org/lti/blti/bltiv1p0/ltiBLTIimgv1p0.html" target="_blank">http://www.imsglobal.org/lti/blti/bltiv1p0/ltiBLTIimgv1p0.html</a>
 				</p> 
-				
-				
+			</dd>
+			<dt>Key</dt>
+		    <dd>
+			   	<p><em>Required.</em> This is the public parameter that uniquely identifies this portlet connecting to the Basic LTI provider, e.g. <b>my.school.edu.au</b>.</p>
+			</dd>
+			<dt>Secret</dt>
+		    <dd>
+			   	<p><em>Required.</em> This is the private value tied to the Basic LTI key, and is privately shared between the portlet and the Basic LTI provider, e.g. <b>secret</b>.</p>
 			</dd>
 	    </dl>
 			

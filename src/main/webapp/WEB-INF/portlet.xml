@@ -23,16 +23,6 @@
 			<keywords>connector, basiclti, lti</keywords>
 		</portlet-info>
 		
-		<!-- This application's Basic LTI key -->
-		<init-param>
-   			<name>key</name>
-   			<value>my.school.edu.au</value>
-		</init-param>
-		<init-param>
-   			<name>secret</name>
-   			<value>secret</value>
-		</init-param>
-		
 		<!-- attribute mapping configuration -->
 		<!-- 
 		This must match the 'name' value of the Username user-attribute below so that we can map this correctly in
