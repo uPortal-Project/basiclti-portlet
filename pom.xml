@@ -6,7 +6,7 @@
   	<artifactId>basiclti-portlet</artifactId>
   	<name>Basic LTI portlet for uPortal</name>
   	
-  	<version>1.1-SNAPSHOT</version>
+  	<version>1.1</version>
   	<packaging>war</packaging>
   	 	
   	<organization>
@@ -108,8 +108,8 @@
 	</distributionManagement>
   	
   	<scm>
-      	<developerConnection>scm:svn:https://doiweb-repo.anu.edu.au/repositories/es-projects/anu-portlets/basiclti-portlet/trunk</developerConnection>
-      	<url>https://doiweb-repo.anu.edu.au/repositories/es-projects/anu-portlets/basiclti-portlet/trunk</url>
+      	<developerConnection>scm:svn:https://doiweb-repo.anu.edu.au/repositories/es-projects/anu-portlets/basiclti-portlet/tags/basiclti-portlet-1.1</developerConnection>
+      	<url>https://doiweb-repo.anu.edu.au/repositories/es-projects/anu-portlets/basiclti-portlet/tags/basiclti-portlet-1.1</url>
    	</scm> 
   
     <dependencies>
