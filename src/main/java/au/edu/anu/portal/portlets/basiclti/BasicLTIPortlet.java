@@ -3,7 +3,6 @@ package au.edu.anu.portal.portlets.basiclti;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -28,8 +27,6 @@ import net.sf.ehcache.Element;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import au.edu.anu.portal.portlets.basiclti.adapters.BasicLTIAdapterFactory;
 import au.edu.anu.portal.portlets.basiclti.adapters.IBasicLTIAdapter;
@@ -262,14 +259,15 @@ public class BasicLTIPortlet extends GenericPortlet{
 		int prefVersion = getPreferenceVersion(request);
 		PortletSession session = request.getPortletSession();
 		Integer cachedVersion  = (Integer)session.getAttribute("version");
-		if(cachedVersion != null) {
-			log.info("preference version: " + prefVersion + ", cached version: " + cachedVersion);
 		
-			if(prefVersion > cachedVersion.intValue()) {
-				log.info("Cache is dirty");
-				evictFromCache(getPortletNamespace(response));
-			}
+		log.info("preference version: " + prefVersion + ", cached version: " + cachedVersion);
+		
+		//if the pref version is newer or we have no cached version, evict.
+		if(cachedVersion == null || prefVersion > cachedVersion.intValue()) {
+			log.info("Cache is dirty");
+			evictFromCache(getPortletNamespace(response));
 		}
+		
 		
 		//check cache, otherwise form up all of the data
 		String cacheKey = getPortletNamespace(response);
