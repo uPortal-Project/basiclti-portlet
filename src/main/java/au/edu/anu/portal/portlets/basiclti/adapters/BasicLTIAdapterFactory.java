@@ -3,8 +3,6 @@ package au.edu.anu.portal.portlets.basiclti.adapters;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import au.edu.anu.portal.portlets.basiclti.support.CollectionsSupport;
-
 /**
  * Factory class to get an instance of the required IBasicLTIAdapter implementation
  * 
@@ -13,7 +11,7 @@ import au.edu.anu.portal.portlets.basiclti.support.CollectionsSupport;
  */
 public class BasicLTIAdapterFactory {
 
-	private final static Log log = LogFactory.getLog(CollectionsSupport.class);
+	private final static Log log = LogFactory.getLog(BasicLTIAdapterFactory.class);
 
 	/**
 	 * Instantiate the desired implementation
