@@ -14,6 +14,7 @@
 		<supports>
 			<mime-type>text/html</mime-type>
 			<portlet-mode>VIEW</portlet-mode>
+			<portlet-mode>EDIT</portlet-mode>
 			<portlet-mode>CONFIG</portlet-mode>
 		</supports>
 		<supported-locale>en</supported-locale>
@@ -52,6 +53,10 @@
 		<init-param>
 			<name>configUrl</name>
 			<value>/pages/config.jsp</value>
+		</init-param>
+		<init-param>
+			<name>editUrl</name>
+			<value>/pages/edit.jsp</value>
 		</init-param>
 		
 		

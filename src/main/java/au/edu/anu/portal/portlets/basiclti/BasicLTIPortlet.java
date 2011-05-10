@@ -54,6 +54,7 @@ public class BasicLTIPortlet extends GenericPortlet{
 	private String proxyUrl;
 	private String errorUrl;
 	private String configUrl;
+	private String editUrl;
 	
 	//attribute mappings
 	private String attributeMappingForUsername;
@@ -74,6 +75,7 @@ public class BasicLTIPortlet extends GenericPortlet{
 	   proxyUrl = config.getInitParameter("proxyUrl");
 	   errorUrl = config.getInitParameter("errorUrl");
 	   configUrl = config.getInitParameter("configUrl");
+	   editUrl = config.getInitParameter("editUrl");
 
 	   //params
 	   attributeMappingForUsername = config.getInitParameter("portal.attribute.mapping.username");
@@ -150,14 +152,42 @@ public class BasicLTIPortlet extends GenericPortlet{
 	}
 	
 	/**
+	 * Handler for edit mode
+	 */
+	protected void doEdit(RenderRequest request, RenderResponse response) throws PortletException, IOException {
+		log.info("Basic LTI doEdit()");
+
+		request.setAttribute("configuredPortletHeight", getConfiguredPortletHeight(request));
+		request.setAttribute("configuredPortletTitle", getConfiguredPortletTitle(request));
+
+		dispatch(request, response, editUrl);
+	}
+	
+	
+	
+	/**
 	 * Process any portlet actions. At this stage they are all from the submission of the CONFIG mode.
 	 */
 	public void processAction(ActionRequest request, ActionResponse response) {
 		log.info("Basic LTI processAction()");
 		
-		//At this stage we only ever accept actions from the CONFIG mode.
-		//If in future we allow user editing, then a check needs to be done here to see
-		//from what PortletMode the processAction was called (see doDispatch)
+		//check mode and delegate
+		if (StringUtils.equalsIgnoreCase(request.getPortletMode().toString(), "CONFIG")) {
+			processConfigAction(request, response);
+		} else if (StringUtils.equalsIgnoreCase(request.getPortletMode().toString(), "EDIT")) {
+			processEditAction(request, response);
+		} else {
+			log.error("No handler for PortletMode: " + request.getPortletMode().toString());
+		}
+	}
+	
+	/**
+	 * Helper to process CONFIG mode actions
+	 * @param request
+	 * @param response
+	 */
+	private void processConfigAction(ActionRequest request, ActionResponse response) {
+		log.info("Basic LTI processConfigAction()");
 		
 		boolean success = true;
 		//get prefs and submitted values
@@ -181,6 +211,47 @@ public class BasicLTIPortlet extends GenericPortlet{
 			prefs.setValue("key", key);
 			prefs.setValue("secret", secret);
 			prefs.setValue("version", String.valueOf(newVersion));
+		} catch (ReadOnlyException e) {
+			success = false;
+			response.setRenderParameter("errorMessage", Messages.getString("error.form.readonly.error"));
+			log.error(e);
+		}
+		
+		//save them
+		if(success) {
+			try {
+				prefs.store();
+				response.setPortletMode(PortletMode.VIEW);
+			} catch (ValidatorException e) {
+				response.setRenderParameter("errorMessage", e.getMessage());
+				log.error(e);
+			} catch (IOException e) {
+				response.setRenderParameter("errorMessage", Messages.getString("error.form.save.error"));
+				log.error(e);
+			} catch (PortletModeException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	/**
+	 * Helper to process EDIT mode actions
+	 * @param request
+	 * @param response
+	 */
+	private void processEditAction(ActionRequest request, ActionResponse response) {
+		log.debug("Basic LTI processEditAction()");
+
+		boolean success = true;
+		//get prefs and submitted values
+		PortletPreferences prefs = request.getPreferences();
+		String portletHeight = request.getParameter("portletHeight");
+		String portletTitle = request.getParameter("portletTitle");
+		
+		//validate
+		try {
+			prefs.setValue("portlet_height", portletHeight);
+			prefs.setValue("portlet_title", portletTitle);
 		} catch (ReadOnlyException e) {
 			success = false;
 			response.setRenderParameter("errorMessage", Messages.getString("error.form.readonly.error"));
