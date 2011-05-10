@@ -64,15 +64,15 @@
 		
 		<!-- Adapter classes: do not adjust unless you have created your own adapter -->
 		<init-param>
-   			<name>standard-adapter-class</name>
+   			<name>adapter-class-standard</name>
    			<value>au.edu.anu.portal.portlets.basiclti.adapters.StandardAdapter</value>
 		</init-param>
 		<init-param>
-   			<name>sakai-adapter-class</name>
+   			<name>adapter-class-sakai</name>
    			<value>au.edu.anu.portal.portlets.basiclti.adapters.SakaiAdapter</value>
 		</init-param>
 		<init-param>
-   			<name>peoplesoft-adapter-class</name>
+   			<name>adapter-class-peoplesoft</name>
    			<value>au.edu.anu.portal.portlets.basiclti.adapters.PeoplesoftAdapter</value>
 		</init-param>
 		

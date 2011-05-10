@@ -1,7 +1,10 @@
 package au.edu.anu.portal.portlets.basiclti;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.portlet.ActionRequest;
@@ -81,10 +84,7 @@ public class BasicLTIPortlet extends GenericPortlet{
 	   attributeMappingForUsername = config.getInitParameter("portal.attribute.mapping.username");
 
 	   //adapter classes
-	   adapterClasses = new HashMap<String,String>();
-	   adapterClasses.put("standard", config.getInitParameter("standard-adapter-class"));
-	   adapterClasses.put("sakai", config.getInitParameter("sakai-adapter-class"));
-	   adapterClasses.put("peoplesoft", config.getInitParameter("peoplesoft-adapter-class"));
+	   adapterClasses = initAdapters(config);
 
 	   //setup cache
 	   CacheManager manager = new CacheManager();
@@ -515,6 +515,38 @@ public class BasicLTIPortlet extends GenericPortlet{
 	private void evictFromCache(String cacheKey) {
 		cache.remove(cacheKey);
 		log.info("Evicted data in cache for key: " + cacheKey);
+	}
+	
+	/**
+	 * Processes the init params to get the adapter class map. This method iterates over every init-param, selects the appropriate adapter ones,
+	 * fetches the param value and then strips the 'adapter-class-' prefix from the param name for storage in the map.
+	 * @param config	PortletConfig
+	 * @return	Map of adapter names and classes
+	 */
+	private Map<String,String> initAdapters(PortletConfig config) {
+		
+		Map<String,String> m = new HashMap<String,String>();
+		
+		String ADAPTER_CLASS_PREFIX = "adapter-class-";
+		
+		//get it into a usable form
+	    List<String> paramNames = Collections.list((Enumeration<String>)config.getInitParameterNames());
+		
+	    //iterate over, select the appropriate ones, retrieve the param value then strip param name for storage.
+		for(String paramName: paramNames) {
+			if(StringUtils.startsWith(paramName, ADAPTER_CLASS_PREFIX)) {
+				String adapterName = StringUtils.removeStart(paramName, ADAPTER_CLASS_PREFIX);
+				String adapterClass = config.getInitParameter(paramName);
+				
+				m.put(adapterName, adapterClass);
+				
+				log.info("Registered adapter: " + adapterName + " with class: " + adapterClass);
+			}
+		}
+		
+		log.info("Autowired: " + m.size() + " adapters");
+		
+		return m;
 	}
 
 	
