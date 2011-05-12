@@ -123,15 +123,17 @@ pageContext.setAttribute("heights",heights);
 			    			<li>standard</li>
 			    			<li>sakai</li>
 			    			<li>peoplesoft</li>
+			    			<li>noteflight</li>
 			    		</ul>
 		    		</p>
 		   			<p>Future support may include:
 						<ul>
 			    			<li>sakai_oae</li>
-		   					<li>moodle</li>
-		   					<li>mediawiki</li>
+			    			<li>mediawiki</li>
 		   					<li>wordpress</li>
-		   					<li>... anything that supports Basic LTI and has an adapter implementation in this portlet.</li>
+		   					<li>moodle</li>
+		   					<li>blackboard</li>
+		   					<li>... anything that provides Basic LTI provider support and has an adapter implementation in this portlet.</li>
 		   				</ul>
 		   			</p>
 		    	</dd>

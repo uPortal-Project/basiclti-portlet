@@ -75,6 +75,11 @@
    			<name>adapter-class-peoplesoft</name>
    			<value>au.edu.anu.portal.portlets.basiclti.adapters.PeoplesoftAdapter</value>
 		</init-param>
+		<init-param>
+			<name>adapter-class-noteflight</name>
+			<value>au.edu.anu.portal.portlets.basiclti.adapters.NoteflightAdapter</value>
+		</init-param>
+
 		
 		
 	</portlet>
