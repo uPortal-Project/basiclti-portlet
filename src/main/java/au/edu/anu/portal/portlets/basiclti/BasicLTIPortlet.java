@@ -371,7 +371,7 @@ public class BasicLTIPortlet extends GenericPortlet{
 			params.put("lis_person_name_given", userInfo.get("givenName"));
 			params.put("lis_person_name_family", userInfo.get("sn"));
 			params.put("lis_person_name_full", userInfo.get("displayName"));
-			params.put("lis_person_contact_email_primary", "steve.swinsburg@anu.edu.au");
+			params.put("lis_person_contact_email_primary", userInfo.get("mail"));
 			
 			//add required basic LTI fields
 			params.put("resource_link_id", getPortletNamespace(response));
