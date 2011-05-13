@@ -79,7 +79,10 @@
 			<name>adapter-class-noteflight</name>
 			<value>au.edu.anu.portal.portlets.basiclti.adapters.NoteflightAdapter</value>
 		</init-param>
-
+		<init-param>
+			<name>adapter-class-chemvantage</name>
+			<value>au.edu.anu.portal.portlets.basiclti.adapters.ChemvantageAdapter</value>
+		</init-param>
 		
 		
 	</portlet>
