@@ -18,7 +18,11 @@ public class NoteflightAdapter extends AbstractAdapter {
 
 	
 	/**
-	 * Currently returns the map of params unchanged (except for adding the default params), as per a standard Basic LTI request.
+	 * Currently returns the map of params unchanged (except for adding the default params).
+	 * 
+	 * <p>
+	 * Note this is currently equivalent to a standard Basic LTI launch.
+	 * This adapter has been added to cater for any custom behaviour that Noteflight may provide in the future.
 	 * 
 	 * @param params	map of launch data params
 	 * @return the map, unchanged
