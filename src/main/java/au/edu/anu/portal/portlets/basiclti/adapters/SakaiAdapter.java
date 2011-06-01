@@ -37,7 +37,7 @@ public class SakaiAdapter extends AbstractAdapter {
 	/**
 	 * This parameter is added to the map and contains the eid of the user.
 	 */
-	private final String EXT_SAKAI_PROVIDER_EID = "ext_sakai_provider_eid";
+	private final static String EXT_SAKAI_PROVIDER_EID = "ext_sakai_provider_eid";
 	
 	
 	/**

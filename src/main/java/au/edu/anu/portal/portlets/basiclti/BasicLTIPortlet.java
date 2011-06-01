@@ -83,7 +83,7 @@ public class BasicLTIPortlet extends GenericPortlet{
 	
 	//cache
 	private Cache cache;
-	private final String CACHE_NAME = "au.edu.anu.portal.portlets.cache.BasicLTIPortletCache";
+	private final static String CACHE_NAME = "au.edu.anu.portal.portlets.cache.BasicLTIPortletCache";
 	
 	public void init(PortletConfig config) throws PortletException {	   
 	   super.init(config);
