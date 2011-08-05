@@ -103,7 +103,7 @@
 		</repository>
 		<site>
       		<id>es-maven-site</id>
-      		<url>scpexe://es-maven.anu.edu.au/export/web/es-maven/site/${artifactId}</url>
+      		<url>scpexe://es-maven.anu.edu.au/export/web/es-maven/site/portlets/${artifactId}</url>
     	</site>
 	</distributionManagement>
   	
