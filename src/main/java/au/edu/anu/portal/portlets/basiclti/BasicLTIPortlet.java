@@ -182,7 +182,7 @@ public class BasicLTIPortlet extends GenericPortlet{
 	
 	
 	/**
-	 * Process any portlet actions. At this stage they are all from the submission of the CONFIG mode.
+	 * Process any portlet actions.
 	 */
 	public void processAction(ActionRequest request, ActionResponse response) {
 		log.info("Basic LTI processAction()");
