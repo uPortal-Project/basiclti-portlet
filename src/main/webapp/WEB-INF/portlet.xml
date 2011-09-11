@@ -24,19 +24,6 @@
 			<keywords>connector, basiclti, lti</keywords>
 		</portlet-info>
 		
-		<!-- attribute mapping configuration -->
-		<!-- 
-		This must match the 'name' value of the Username user-attribute below so that we can map this correctly in
-		different portal environments, or if your environment has this setup differently. 
-		uPortal: username
-		Liferay: user.name.nickName 
-		-->
-		<init-param>
-   			<name>portal.attribute.mapping.username</name>
-   			<value>username</value>
-		</init-param>
-		
-		
 		<!-- Pages: do not adjust -->
 		<init-param>
 			<name>viewUrl</name>
@@ -85,11 +72,43 @@
 		</init-param>
 		
 		
+		<!-- attribute mapping configuration -->
+		<!-- 
+		These must match the 'name' value of the user-attributes below so that we can map this correctly in
+		different portal environments, or if your environment has this setup differently. 
+		uPortal: uid
+		Liferay: user.name.nickName 
+		-->
+		<init-param>
+   			<name>portal.attribute.mapping.username</name>
+   			<value>uid</value>
+		</init-param>
+		<init-param>
+   			<name>portal.attribute.mapping.firstName</name>
+   			<value>givenName</value>
+		</init-param>
+		<init-param>
+   			<name>portal.attribute.mapping.lastName</name>
+   			<value>sn</value>
+		</init-param>
+		<init-param>
+   			<name>portal.attribute.mapping.email</name>
+   			<value>mail</value>
+		</init-param>
+		<init-param>
+   			<name>portal.attribute.mapping.displayName</name>
+   			<value>displayName</value>
+		</init-param>
+		
+		
+		
+		
 	</portlet>
 	
-	<!--  Portlet user attributes: generally you don't need to adjust these unless the attributes are mapped differently to below. -->
+	<!--  Portlet user attributes: generally you don't need to adjust these unless the attributes are mapped differently to below.
+	Don't forget to change the mapping reference above, if you do change them -->
 	<user-attribute>
-		<name>username</name>
+		<name>uid</name>
 		<description>Username attribute</description>
 	</user-attribute>
 	<user-attribute>

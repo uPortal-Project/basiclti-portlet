@@ -77,6 +77,10 @@ public class BasicLTIPortlet extends GenericPortlet{
 	
 	//attribute mappings
 	private String attributeMappingForUsername;
+	private String attributeMappingForFirstName;
+	private String attributeMappingForLastName;
+	private String attributeMappingForEmail;
+	private String attributeMappingForDisplayName;
 
 	//adapter classes
 	private Map<String,String> adapterClasses;
@@ -98,6 +102,10 @@ public class BasicLTIPortlet extends GenericPortlet{
 
 	   //params
 	   attributeMappingForUsername = config.getInitParameter("portal.attribute.mapping.username");
+	   attributeMappingForFirstName = config.getInitParameter("portal.attribute.mapping.firstName");
+	   attributeMappingForLastName = config.getInitParameter("portal.attribute.mapping.lastName");
+	   attributeMappingForEmail = config.getInitParameter("portal.attribute.mapping.email");
+	   attributeMappingForDisplayName = config.getInitParameter("portal.attribute.mapping.displayName");
 
 	   //adapter classes
 	   adapterClasses = initAdapters(config);
@@ -382,12 +390,18 @@ public class BasicLTIPortlet extends GenericPortlet{
 			//get user info
 			Map<String,String> userInfo = getUserInfo(request);
 			
+			//debug the userInfo
+			if(log.isDebugEnabled()) {
+				log.debug("userInfo parameter map");
+				CollectionsSupport.printMap(userInfo);
+			}
+			
 			//add required user fields
-			params.put("user_id", userInfo.get("username"));
-			params.put("lis_person_name_given", userInfo.get("givenName"));
-			params.put("lis_person_name_family", userInfo.get("sn"));
-			params.put("lis_person_name_full", userInfo.get("displayName"));
-			params.put("lis_person_contact_email_primary", userInfo.get("mail"));
+			params.put("user_id", userInfo.get(attributeMappingForUsername));
+			params.put("lis_person_name_given", userInfo.get(attributeMappingForFirstName));
+			params.put("lis_person_name_family", userInfo.get(attributeMappingForLastName));
+			params.put("lis_person_name_full", userInfo.get(attributeMappingForDisplayName));
+			params.put("lis_person_contact_email_primary", userInfo.get(attributeMappingForEmail));
 			
 			//add required basic LTI fields
 			params.put("resource_link_id", getPortletNamespace(response));
@@ -501,18 +515,6 @@ public class BasicLTIPortlet extends GenericPortlet{
 	private int getPreferenceVersion(RenderRequest request) {
 		PortletPreferences pref = request.getPreferences();
 		return Integer.parseInt(pref.getValue("version", "-1"));
-	}
-		
-	
-	/**
-	 * Get the current username
-	 * @param request
-	 * @return
-	 */
-	private String getAuthenticatedUsername(RenderRequest request) {
-		Map<String,String> userInfo = getUserInfo(request);
-		//return userInfo.get("username");
-		return userInfo.get(attributeMappingForUsername);
 	}
 	
 	
