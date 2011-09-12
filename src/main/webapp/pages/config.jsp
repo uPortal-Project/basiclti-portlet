@@ -143,6 +143,7 @@ pageContext.setAttribute("heights",heights);
 			    			<li>peoplesoft</li>
 			    			<li>noteflight</li>
 			    			<li>chemvantage</li>
+			    			<li>wimba</li>
 			    		</ul>
 		    		</p>
 		   			<p>Future support may include:

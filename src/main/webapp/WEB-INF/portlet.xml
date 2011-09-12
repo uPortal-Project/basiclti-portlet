@@ -70,6 +70,10 @@
 			<name>adapter-class-chemvantage</name>
 			<value>au.edu.anu.portal.portlets.basiclti.adapters.ChemvantageAdapter</value>
 		</init-param>
+		<init-param>
+			<name>adapter-class-wimba</name>
+			<value>au.edu.anu.portal.portlets.basiclti.adapters.WimbaAdapter</value>
+		</init-param>
 		
 		
 		<!-- attribute mapping configuration -->
