@@ -43,6 +43,7 @@ import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -270,12 +271,17 @@ public class BasicLTIPortlet extends GenericPortlet{
 		//get prefs and submitted values
 		PortletPreferences prefs = request.getPreferences();
 		String portletHeight = request.getParameter("portletHeight");
-		String portletTitle = request.getParameter("portletTitle");
+		String portletTitle = StringEscapeUtils.escapeHtml(StringUtils.trim(request.getParameter("portletTitle")));
+		
 		
 		//validate
 		try {
 			prefs.setValue("portlet_height", portletHeight);
-			prefs.setValue("portlet_title", portletTitle);
+			
+			//only save if portlet title is not blank
+			if(StringUtils.isNotBlank(portletTitle)){
+				prefs.setValue("portlet_title", portletTitle);
+			}
 		} catch (ReadOnlyException e) {
 			success = false;
 			response.setRenderParameter("errorMessage", Messages.getString("error.form.readonly.error"));
