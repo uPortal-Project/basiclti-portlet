@@ -74,6 +74,10 @@
 			<name>adapter-class-wimba</name>
 			<value>au.edu.anu.portal.portlets.basiclti.adapters.WimbaAdapter</value>
 		</init-param>
+		<init-param>
+			<name>adapter-class-wikispaces</name>
+			<value>au.edu.anu.portal.portlets.basiclti.adapters.WikispacesAdapter</value>
+		</init-param>
 		
 		
 		<!-- attribute mapping configuration -->
