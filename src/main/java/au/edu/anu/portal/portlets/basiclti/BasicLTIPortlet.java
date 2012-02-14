@@ -88,6 +88,7 @@ public class BasicLTIPortlet extends GenericPortlet{
 	
 	//cache
 	private Cache cache;
+	private CacheManager cacheManager;
 	private final static String CACHE_NAME = "au.edu.anu.portal.portlets.cache.BasicLTIPortletCache";
 	
 	public void init(PortletConfig config) throws PortletException {	   
@@ -112,8 +113,8 @@ public class BasicLTIPortlet extends GenericPortlet{
 	   adapterClasses = initAdapters(config);
 
 	   //setup cache
-	   CacheManager manager = new CacheManager();
-	   cache = manager.getCache(CACHE_NAME);
+	   cacheManager = new CacheManager();
+	   cache = cacheManager.getCache(CACHE_NAME);
 	}
 	
 	/**
@@ -621,6 +622,7 @@ public class BasicLTIPortlet extends GenericPortlet{
 	
 	public void destroy() {
 		log.info("destroy()");
+		cacheManager.shutdown();
 	}
 	
 	
