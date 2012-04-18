@@ -21,7 +21,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="portlet" uri="http://java.sun.com/portlet" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
-<%@ taglib prefix="rs" uri="http://www.jasig.org/resource-server" %>
 
 
 <%@ page import="java.util.List" %>
@@ -42,8 +41,6 @@ pageContext.setAttribute("heights",heights);
 
 <portlet:defineObjects /> 
 <fmt:setBundle basename="au.edu.anu.portal.portlets.basiclti.utils.messages" />
-
-<rs:resourceURL var="jQueryPath" value="/rs/jquery/1.4.2/jquery-1.4.2.min.js"/>
 
 <style type="text/css">
 
