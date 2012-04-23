@@ -37,26 +37,6 @@
 
 	<repositories>
         <repository>
-            <id>jasig-m2</id>
-            <name>Jasig Maven2 Repository</name>
-            <url>http://developer.jasig.org/repo/content/repositories/m2/</url>
-        </repository>
-        <repository>
-            <id>jasig-3rd-party</id>
-            <name>Jasig 3rd Party Repository</name>
-            <url>http://developer.jasig.org/repo/content/repositories/3rd-party</url>
-        </repository>
-        <repository>
-            <id>Codehaus Snapshots</id>
-            <url>http://snapshots.repository.codehaus.org/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </repository>
-        <repository>
 			<id>es-maven</id>
 			<name>Enterprise Systems Maven Repository</name>
 			<url>https://es-maven.anu.edu.au/maven2</url>
