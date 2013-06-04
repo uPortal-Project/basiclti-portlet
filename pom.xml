@@ -43,7 +43,7 @@
 		<connection>scm:git:git@github.com:Jasig/basiclti-portlet.git</connection>
       	<developerConnection>scm:git:git@github.com:Jasig/basiclti-portlet.git</developerConnection>
       	<url>scm:git:git@github.com:Jasig/basiclti-portlet.git</url>
-   	</scm> 
+	</scm> 
   
     <dependencies>
   		
