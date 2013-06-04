@@ -8,13 +8,13 @@
   	<description>A portlet that implements the IMS Basic Learning Tools Interoperability specification and allows you to render any Basic LTI enabled application inside uPortal.</description>
   	<url>https://wiki.jasig.org/display/PLT/Basic+LTI+Portlet</url>
   	
-  	<version>1.3.2-SNAPSHOT</version>
+  	<version>1.4.0-SNAPSHOT</version>
   	<packaging>war</packaging>
   	
   	<parent>
         <groupId>org.jasig.parent</groupId>
         <artifactId>jasig-parent</artifactId>
-        <version>33</version>
+        <version>35</version>
     </parent>
   	 	
     <inceptionYear>2010</inceptionYear>
@@ -30,7 +30,7 @@
 	<developers>
 		<developer>
 			<name>Steve Swinsburg</name>
-			<email>steve.swinsburg@anu.edu.au</email>
+			<email>steve.swinsburg@gmail.com</email>
 		</developer>
 	</developers>
     
@@ -64,11 +64,15 @@
 			<version>2.6</version>
 		</dependency>
 		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+		<dependency>
 			<groupId>commons-validator</groupId>
 			<artifactId>commons-validator</artifactId>
 			<version>1.3.1</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
@@ -79,13 +83,11 @@
 			<artifactId>commons-codec</artifactId>
 			<version>1.4</version>
 		</dependency>
-		
 		<dependency>
 			<groupId>net.oauth.core</groupId>
 			<artifactId>oauth</artifactId>
 			<version>20100527</version>
 		</dependency>
-		
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
@@ -118,12 +120,6 @@
       		<version>2.4</version>
       		<scope>provided</scope>
     	</dependency>
-		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-			<version>1.1.1</version>
-			<scope>provided</scope>
-		</dependency>
 		
 		<dependency>
 			<groupId>org.apache.pluto</groupId>
@@ -187,7 +183,7 @@
 					<basedir>${basedir}</basedir>
 					<header>docs/apache-license-2-template.txt</header>
 					<properties>
-						<year>${project.inceptionYear}-2012</year>
+						<year>${project.inceptionYear}-2013</year>
 						<holder>The Australian National University</holder>
 					</properties>
 					<encoding>UTF-8</encoding>
@@ -254,41 +250,7 @@
 			</build>
 		</profile>
 		
-		<!-- special profile to automatically add the pluto invoker config to the built webapp, and to specify the final name of the webapp
-		This means you can just drop the war file into tomcat/webapps and it is ready to go -->
-		<profile>
-			<id>pluto-assemble</id>
-			<build>
-				<finalName>${war.name}</finalName>
-				<plugins>
-					<!-- Configure maven-war-plugin to use the updated web.xml that the pluto plugin creates -->
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-war-plugin</artifactId>
-						<version>2.2</version>
-						<configuration>
-							<webXml>${project.build.directory}/pluto-resources/web.xml</webXml>
-						</configuration>
-					</plugin>
-		
-					<!-- Bind 'pluto:assemble' goal to 'generate-resources' lifecycle -->
-					<plugin>
-						<groupId>org.apache.pluto</groupId>
-						<artifactId>maven-pluto-plugin</artifactId>
-						<version>1.1.7</version>
-						<executions>
-							<execution>
-								<phase>generate-resources</phase>
-								<goals>
-									<goal>assemble</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		
+		<!-- For generating the Maven site -->
 		<profile>
 			<id>manual-site</id>
 			<distributionManagement>
