@@ -8,7 +8,7 @@
   	<description>A portlet that implements the IMS Basic Learning Tools Interoperability specification and allows you to render any Basic LTI enabled application inside uPortal.</description>
   	<url>https://wiki.jasig.org/display/PLT/Basic+LTI+Portlet</url>
   	
-  	<version>1.4.2-SNAPSHOT</version>
+  	<version>1.4.2</version>
   	<packaging>war</packaging>
   	
   	<parent>
@@ -43,7 +43,7 @@
 		<connection>scm:git:git@github.com:Jasig/basiclti-portlet.git</connection>
       	<developerConnection>scm:git:git@github.com:Jasig/basiclti-portlet.git</developerConnection>
       	<url>scm:git:git@github.com:Jasig/basiclti-portlet.git</url>
-    <tag>HEAD</tag>
+    <tag>basiclti-portlet-1.4.2</tag>
   </scm> 
   
     <dependencies>
