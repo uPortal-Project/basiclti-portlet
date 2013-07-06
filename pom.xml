@@ -140,7 +140,7 @@
   
 	<build>
 		<resources>
-			<!--  include log4j.properties -->
+			<!--  include log4j.properties and cache config -->
 			<resource>
 				<filtering>false</filtering>
 				<directory>src/main/resources</directory>
