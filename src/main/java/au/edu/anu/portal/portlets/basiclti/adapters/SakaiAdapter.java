@@ -18,8 +18,8 @@ package au.edu.anu.portal.portlets.basiclti.adapters;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -31,7 +31,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class SakaiAdapter extends AbstractAdapter {
 
-	private final Log log = LogFactory.getLog(getClass().getName());
+	private final Logger log = LoggerFactory.getLogger(getClass().getName());
 	
 	/**
 	 * This parameter is added to the map and contains the eid of the user.
