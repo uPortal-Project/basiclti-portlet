@@ -15,8 +15,8 @@
  */
 package au.edu.anu.portal.portlets.basiclti.adapters;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Factory class to get an instance of the required IBasicLTIAdapter implementation
@@ -26,7 +26,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class BasicLTIAdapterFactory {
 
-	private final static Log log = LogFactory.getLog(BasicLTIAdapterFactory.class);
+	private final static Logger log = LoggerFactory.getLogger(BasicLTIAdapterFactory.class);
 
 	/**
 	 * Instantiate the desired implementation

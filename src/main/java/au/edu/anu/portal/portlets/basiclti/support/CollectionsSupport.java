@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Java.util.Collections utility class. Does a few miscellaneous tasks
@@ -32,7 +32,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class CollectionsSupport {
 
-	private final static Log log = LogFactory.getLog(CollectionsSupport.class);
+	private final static Logger log = LoggerFactory.getLogger(CollectionsSupport.class);
 
 	/**
 	 * Print all key-value pairs of a map to the log at debug level

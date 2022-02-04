@@ -17,8 +17,8 @@ package au.edu.anu.portal.portlets.basiclti.adapters;
 
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -31,7 +31,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class WimbaAdapter extends AbstractAdapter {
 
-	private final Log log = LogFactory.getLog(getClass().getName());
+	private final Logger log = LoggerFactory.getLogger(getClass().getName());
 
 	private final String ROLE_INSTRUCTOR = "Instructor";
 	private final String ROLE_STUDENT = "Student";
