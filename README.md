@@ -1,5 +1,8 @@
 # Basic LTI Portlet
 
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.jasig.portlet/basiclti-portlet/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.jasig.portlet/basiclti-portlet)
+[![build status](https://github.com/uPortal-Project/basiclti-portlet/workflows/CI/badge.svg?branch=master)](https://github.com/uPortal-Project/basiclti-portlet/actions)
+
 This is a portlet that implements the IMS Basic Learning Tools Interoperability specification and allows you to render any Basic LTI enabled application inside uPortal. Possibilities include Sakai tools, Peoplesoft components, tools from other LMS's, collaboration and learning tools, blogs, forums, wikis, the list is endless.
 
 ### Features
