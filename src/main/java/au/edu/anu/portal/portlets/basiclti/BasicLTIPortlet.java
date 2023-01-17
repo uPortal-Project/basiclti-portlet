@@ -239,7 +239,7 @@ public class BasicLTIPortlet extends GenericPortlet{
 		} catch (ReadOnlyException e) {
 			success = false;
 			response.setRenderParameter("errorMessage", Messages.getString("error.form.readonly.error"));
-			log.error(e);
+			log.error(e.getMessage(), e);
 		}
 		
 		//save them
@@ -249,10 +249,10 @@ public class BasicLTIPortlet extends GenericPortlet{
 				response.setPortletMode(PortletMode.VIEW);
 			} catch (ValidatorException e) {
 				response.setRenderParameter("errorMessage", e.getMessage());
-				log.error(e);
+				log.error(e.getMessage(), e);
 			} catch (IOException e) {
 				response.setRenderParameter("errorMessage", Messages.getString("error.form.save.error"));
-				log.error(e);
+				log.error(e.getMessage(), e);
 			} catch (PortletModeException e) {
 				e.printStackTrace();
 			}
@@ -285,7 +285,7 @@ public class BasicLTIPortlet extends GenericPortlet{
 		} catch (ReadOnlyException e) {
 			success = false;
 			response.setRenderParameter("errorMessage", Messages.getString("error.form.readonly.error"));
-			log.error(e);
+			log.error(e.getMessage(), e);
 		}
 		
 		//save them
@@ -295,10 +295,10 @@ public class BasicLTIPortlet extends GenericPortlet{
 				response.setPortletMode(PortletMode.VIEW);
 			} catch (ValidatorException e) {
 				response.setRenderParameter("errorMessage", e.getMessage());
-				log.error(e);
+				log.error(e.getMessage(), e);
 			} catch (IOException e) {
 				response.setRenderParameter("errorMessage", Messages.getString("error.form.save.error"));
-				log.error(e);
+				log.error(e.getMessage(), e);
 			} catch (PortletModeException e) {
 				e.printStackTrace();
 			}

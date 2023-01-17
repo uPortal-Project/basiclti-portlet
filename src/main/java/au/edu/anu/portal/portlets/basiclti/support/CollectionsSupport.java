@@ -40,7 +40,7 @@ public class CollectionsSupport {
 	 */
 	public static void printMap(Map<?,?> map) {
 		for (Map.Entry<?,?> param : map.entrySet()) {
-			log.error(param.getKey() + ":" + param.getValue());
+			log.debug(param.getKey() + ":" + param.getValue());
 		}
 	}
 	
