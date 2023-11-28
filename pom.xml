@@ -70,7 +70,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.build.sourceVersion>1.8</project.build.sourceVersion>
     <project.build.targetVersion>1.8</project.build.targetVersion>
-    <logbackVersion>1.2.10</logbackVersion>
+    <logbackVersion>1.4.13</logbackVersion>
     <slf4jVersion>1.7.35</slf4jVersion>
   </properties>
 
