@@ -71,7 +71,7 @@
     <project.build.sourceVersion>17</project.build.sourceVersion>
     <project.build.targetVersion>17</project.build.targetVersion>
     <logbackVersion>1.5.16</logbackVersion>
-    <slf4jVersion>2.0.16</slf4jVersion>
+    <slf4jVersion>2.0.17</slf4jVersion>
   </properties>
 
   <dependencies>
