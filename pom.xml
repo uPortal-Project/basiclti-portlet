@@ -69,7 +69,7 @@
     <war.name>${project.artifactId}</war.name>
     <!-- Override parent's logback 1.3.12; this portlet tracks the logback 1.5.x
          line to stay current with security fixes (still SLF4J 2.x compatible). -->
-    <logbackVersion>1.5.16</logbackVersion>
+    <logbackVersion>1.5.32</logbackVersion>
   </properties>
 
   <dependencies>
