@@ -93,7 +93,7 @@
     <dependency>
       <groupId>commons-validator</groupId>
       <artifactId>commons-validator</artifactId>
-      <version>1.10.1</version>
+      <version>1.11.0</version>
       <exclusions>
         <!-- commons-validator transitively pulls commons-beanutils → commons-collections 3.2.2
              (CVE-2015-6420, banned by uportal-portlet-parent) and commons-logging 1.x
